@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 // --- REACT-ICONS IMPORTS ---
 // Project-specific icons (kept as per your choices)
@@ -8,7 +8,8 @@ import { FaRoad, FaHardHat } from 'react-icons/fa';
 import { TbBuildingTunnel } from 'react-icons/tb';
 
 // UI Icons (switched to Material Design to resolve previous errors)
-import { MdLocationOn, MdChevronRight, MdClose } from 'react-icons/md';
+import { MdLocationOn, MdClose } from 'react-icons/md';
+import { Button } from './ui/button';
 // --- END REACT-ICONS IMPORTS ---
 
 
@@ -28,8 +29,66 @@ interface KeyProjectsProps {
   projects: Project[];
 }
 
+type ProjectCategoryKey = 'highways' | 'railways' | 'miscellaneous';
+
+const categoryConfig: Record<ProjectCategoryKey, { label: string; description: string }> = {
+  highways: {
+    label: 'Highways',
+    description: 'Major roadway, express lane, and bridge programs delivering critical mobility improvements.',
+  },
+  railways: {
+    label: 'Railways',
+    description: 'High-speed rail, commuter rail, and tramway systems enabling reliable passenger connections.',
+  },
+  miscellaneous: {
+    label: 'Miscellaneous',
+    description: 'Specialty infrastructure and multi-disciplinary programs beyond traditional rail and highway scopes.',
+  },
+};
+
+const getProjectCategoryKey = (project: Project): ProjectCategoryKey => {
+  const text = `${project.name} ${project.scope ?? ''}`.toLowerCase();
+
+  if (text.includes('rail') || text.includes('tram') || text.includes('track')) {
+    return 'railways';
+  }
+
+  if (
+    text.includes('highway') ||
+    text.includes('interstate') ||
+    text.includes('i-') ||
+    text.includes('sr-') ||
+    text.includes('express') ||
+    text.includes('parkway') ||
+    text.includes('toll') ||
+    text.includes('road') ||
+    text.includes('lane') ||
+    text.includes('bridge')
+  ) {
+    return 'highways';
+  }
+
+  return 'miscellaneous';
+};
+
 const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeCategory, setActiveCategory] = useState<ProjectCategoryKey>('highways');
+
+  const categorizedProjects = useMemo(() => {
+    return projects.reduce<Record<ProjectCategoryKey, Project[]>>(
+      (acc, project) => {
+        const key = getProjectCategoryKey(project);
+        acc[key] = [...acc[key], project];
+        return acc;
+      },
+      {
+        highways: [],
+        railways: [],
+        miscellaneous: [],
+      },
+    );
+  }, [projects]);
 
   const formatValue = (value: string): string => {
     if (value.includes('$')) {
@@ -128,6 +187,64 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                 )}
               </div>
             ))}
+          </div>
+
+          <div className="bg-background border border-border rounded-2xl shadow-sm p-8">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-semibold text-foreground">Explore My Project Portfolio</h3>
+              <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
+                Browse flagship programs organized by focus area. Select a category to see the projects I&apos;ve led across highways,
+                rail corridors, and multidisciplinary initiatives.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
+              {Object.entries(categoryConfig).map(([key, value]) => (
+                <Button
+                  key={key}
+                  variant={activeCategory === key ? 'default' : 'outline'}
+                  onClick={() => setActiveCategory(key as ProjectCategoryKey)}
+                  className="min-w-[150px]"
+                >
+                  {value.label}
+                </Button>
+              ))}
+            </div>
+
+            <div className="max-w-3xl mx-auto text-left">
+              <div className="mb-4">
+                <h4 className="text-lg font-semibold text-foreground">{categoryConfig[activeCategory].label}</h4>
+                <p className="text-muted-foreground text-sm">
+                  {categoryConfig[activeCategory].description}
+                </p>
+              </div>
+
+              <ul className="space-y-3">
+                {categorizedProjects[activeCategory].map((project, index) => (
+                  <li
+                    key={`${activeCategory}-${index}`}
+                    className="border border-border rounded-xl p-4 hover:border-primary/40 hover:shadow transition-colors"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <div>
+                        <p className="text-base font-medium text-foreground">{project.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {project.role} · {project.company}
+                        </p>
+                      </div>
+                      {project.value && (
+                        <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
+                          {project.value}
+                        </span>
+                      )}
+                    </div>
+                    {project.scope && (
+                      <p className="text-sm text-muted-foreground mt-2">{project.scope}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
