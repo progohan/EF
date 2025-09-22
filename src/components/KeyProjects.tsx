@@ -10,10 +10,11 @@ import { TbBuildingTunnel } from 'react-icons/tb';
 // UI Icons (switched to Material Design to resolve previous errors)
 import { MdLocationOn, MdClose } from 'react-icons/md';
 import { Button } from './ui/button';
+import ProjectMaps from './ProjectMaps';
 // --- END REACT-ICONS IMPORTS ---
 
 
-interface Project {
+export interface Project {
   name: string;
   value: string;
   role: string;
@@ -333,6 +334,8 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
           </div>
         </div>
       )}
+
+      <ProjectMaps projects={projects} />
     </section>
   );
 };
