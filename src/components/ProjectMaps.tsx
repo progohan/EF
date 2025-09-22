@@ -36,16 +36,16 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
     return [
       {
         id: 'usa',
-        title: 'Estados Unidos',
-        description: 'Programas de transporte, ferrocarriles y autopistas gestionados mediante modelos P3, CMAR y DB.',
+        title: 'United States',
+        description: 'Transportation, rail, and highway programs delivered through P3, CMAR, and DB delivery models.',
         cx: 260,
         cy: 150,
         projects: usaProjects,
       },
       {
         id: 'spain',
-        title: 'España',
-        description: 'Alta velocidad, autopistas y obras hidráulicas que consolidan experiencia técnica en Europa.',
+        title: 'Spain',
+        description: 'High-speed rail corridors, motorway concessions, and hydraulic works that broadened my European portfolio.',
         cx: 470,
         cy: 140,
         projects: spainProjects,
@@ -53,7 +53,7 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
       {
         id: 'colombia',
         title: 'Colombia',
-        description: 'Implementación de tranvías urbanos y soluciones de movilidad sostenible en Medellín.',
+        description: 'Urban tramways and sustainable mobility solutions introduced across the Medellín metro area.',
         cx: 320,
         cy: 220,
         projects: colombiaProjects,
@@ -120,9 +120,9 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
   return (
     <div className="mt-20">
       <div className="text-center mb-12">
-        <h3 className="text-3xl font-semibold text-foreground">Mapa interactivo de proyectos</h3>
+        <h3 className="text-3xl font-semibold text-foreground">Interactive project map</h3>
         <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
-          Recorre el mapa para descubrir en qué regiones he liderado programas estratégicos. Pasa el ratón sobre Estados Unidos para desplegar un mapa detallado con los proyectos destacados y pulsa en cada pin para ver su descripción.
+          Explore the map to see where I have led strategic programs. Hover over the United States to reveal a detailed map with highlighted projects, then click each pin to open its description.
         </p>
       </div>
 
@@ -199,11 +199,11 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
                   </p>
                 ))}
                 {hoveredRegion.projects.length === 0 && (
-                  <p className="text-xs text-muted-foreground">No hay proyectos registrados.</p>
+                  <p className="text-xs text-muted-foreground">No projects recorded.</p>
                 )}
                 {hoveredRegion.projects.length > 3 && (
                   <p className="text-[10px] uppercase tracking-wide text-primary/80 font-semibold">
-                    +{hoveredRegion.projects.length - 3} proyectos más
+                    +{hoveredRegion.projects.length - 3} more projects
                   </p>
                 )}
               </div>
@@ -229,7 +229,7 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
           <div className="bg-background border border-border rounded-3xl shadow-xl p-8">
             <div className="flex flex-col lg:flex-row gap-8 items-start">
               <div className="relative flex-1 w-full">
-                <h4 className="text-2xl font-semibold text-foreground mb-4">Estados Unidos · vista detallada</h4>
+                <h4 className="text-2xl font-semibold text-foreground mb-4">United States · detailed view</h4>
                 <svg viewBox="0 0 520 320" className="w-full h-auto border border-border/60 rounded-2xl bg-muted/40">
                   <path
                     d="M60 140 L120 110 L220 110 L280 130 L320 150 L360 160 L420 150 L460 170 L440 210 L380 230 L320 220 L260 210 L200 210 L140 190 L100 180 Z"
@@ -273,7 +273,7 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
 
               <div className="w-full lg:w-80">
                 <div className="bg-muted/40 border border-border rounded-2xl p-6 h-full">
-                  <h5 className="text-lg font-semibold text-foreground mb-3">Proyecto seleccionado</h5>
+                  <h5 className="text-lg font-semibold text-foreground mb-3">Selected project</h5>
                   {selectedUSProject ? (
                     <div className="space-y-2 text-sm">
                       <p className="font-semibold text-primary">{selectedUSProject.project.name}</p>
@@ -290,7 +290,7 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     </div>
                   ) : (
                     <p className="text-muted-foreground text-sm">
-                      Pasa el ratón por un pin y haz clic para descubrir más detalles del proyecto dentro de Estados Unidos.
+                      Hover over a pin and click to discover additional project details within the United States.
                     </p>
                   )}
                 </div>
