@@ -45,6 +45,7 @@ export interface ResumeData {
     role: string;
     company: string;
     location?: string;
+    client?: string;
     contribution?: string;
     achievement?: string;
     scope?: string;
