@@ -91,11 +91,11 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
     );
   }, [projectsWithInfo]);
 
-  const formatValue = (value: string): string => {
-    if (value.includes('$')) {
-      return value;
+  const handleProjectKeyDown = (e: React.KeyboardEvent, project: Project) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setSelectedProject(project);
     }
-    return value;
   };
 
   return (
@@ -118,15 +118,19 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
             {projectsWithInfo.map((project) => (
               <div
                 key={project.name}
-                className="group bg-background rounded-xl p-6 border border-border shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 cursor-pointer"
+                className="group bg-background rounded-xl p-6 border border-border shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50"
                 onClick={() => setSelectedProject(project)}
+                onKeyDown={(e) => handleProjectKeyDown(e, project)}
+                role="button"
+                tabIndex={0}
+                aria-label={`View details for ${project.name}`}
               >
                 {/* Project Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="text-3xl text-primary">{project.icon}</div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-primary">
-                      {formatValue(project.value)}
+                      {project.value}
                     </div>
                     <div className="text-xs text-muted-foreground">Project Value</div>
                   </div>
@@ -239,7 +243,7 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                     <h3 className="text-2xl font-bold text-foreground mb-2">{selectedProject.name}</h3>
                     <div className="flex items-center text-muted-foreground">
                       <span className="text-3xl font-bold text-primary mr-4">
-                        {formatValue(selectedProject.value)}
+                        {selectedProject.value}
                       </span>
                       <span className="px-2 py-1 bg-primary/10 border border-primary/20 rounded text-primary text-sm">
                         {(selectedProject as Project & ProjectInfo).categoryLabel}

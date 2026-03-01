@@ -48,6 +48,9 @@ const Header: React.FC = () => {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden text-foreground hover:text-primary"
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
@@ -59,7 +62,7 @@ const Header: React.FC = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-2 bg-background p-4 rounded-lg shadow-lg">
+          <div id="mobile-menu" className="md:hidden mt-4 space-y-2 bg-background p-4 rounded-lg shadow-lg">
             <a href="#hero" onClick={handleLinkClick} className="block w-full text-left text-foreground hover:text-primary py-2">
               Home
             </a>
