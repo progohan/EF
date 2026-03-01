@@ -1,36 +1,26 @@
 import React, { useMemo, useState } from 'react';
-
-// --- REACT-ICONS IMPORTS ---
-// Project-specific icons (kept as per your choices)
 import { PiTrain } from 'react-icons/pi';
 import { GiSuspensionBridge } from 'react-icons/gi';
 import { FaRoad, FaHardHat } from 'react-icons/fa';
 import { TbBuildingTunnel } from 'react-icons/tb';
-
-// UI Icons (switched to Material Design to resolve previous errors)
 import { MdLocationOn, MdClose } from 'react-icons/md';
 import { Button } from './ui/button';
 import ProjectMaps from './ProjectMaps';
-// --- END REACT-ICONS IMPORTS ---
+import { ResumeData } from '../types';
 
-
-export interface Project {
-  name: string;
-  value: string;
-  role: string;
-  company: string;
-  client?: string;
-  location?: string;
-  achievement?: string;
-  contribution?: string;
-  scope?: string;
-}
+type Project = ResumeData['key_projects'][0];
 
 interface KeyProjectsProps {
   projects: Project[];
 }
 
 type ProjectCategoryKey = 'highways' | 'railways' | 'miscellaneous';
+
+interface ProjectInfo {
+  categoryKey: ProjectCategoryKey;
+  categoryLabel: string;
+  icon: JSX.Element;
+}
 
 const categoryConfig: Record<ProjectCategoryKey, { label: string; description: string }> = {
   highways: {
@@ -47,11 +37,15 @@ const categoryConfig: Record<ProjectCategoryKey, { label: string; description: s
   },
 };
 
-const getProjectCategoryKey = (project: Project): ProjectCategoryKey => {
+const getProjectInfo = (project: Project): ProjectInfo => {
   const text = `${project.name} ${project.scope ?? ''}`.toLowerCase();
 
   if (text.includes('rail') || text.includes('tram') || text.includes('track')) {
-    return 'railways';
+    return { categoryKey: 'railways', categoryLabel: 'High-Speed Rail', icon: <PiTrain /> };
+  }
+
+  if (text.includes('bridge')) {
+    return { categoryKey: 'highways', categoryLabel: 'Bridge Construction', icon: <GiSuspensionBridge /> };
   }
 
   if (
@@ -63,24 +57,30 @@ const getProjectCategoryKey = (project: Project): ProjectCategoryKey => {
     text.includes('parkway') ||
     text.includes('toll') ||
     text.includes('road') ||
-    text.includes('lane') ||
-    text.includes('bridge')
+    text.includes('lane')
   ) {
-    return 'highways';
+    return { categoryKey: 'highways', categoryLabel: 'Highway Construction', icon: <FaRoad /> };
   }
 
-  return 'miscellaneous';
+  if (text.includes('tunnel')) {
+    return { categoryKey: 'miscellaneous', categoryLabel: 'Tunneling', icon: <TbBuildingTunnel /> };
+  }
+
+  return { categoryKey: 'miscellaneous', categoryLabel: 'Infrastructure', icon: <FaHardHat /> };
 };
 
 const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState<ProjectCategoryKey>('highways');
 
+  const projectsWithInfo = useMemo(() => {
+    return projects.map(p => ({ ...p, ...getProjectInfo(p) }));
+  }, [projects]);
+
   const categorizedProjects = useMemo(() => {
-    return projects.reduce<Record<ProjectCategoryKey, Project[]>>(
+    return projectsWithInfo.reduce<Record<ProjectCategoryKey, (Project & ProjectInfo)[]>>(
       (acc, project) => {
-        const key = getProjectCategoryKey(project);
-        acc[key] = [...acc[key], project];
+        acc[project.categoryKey] = [...acc[project.categoryKey], project];
         return acc;
       },
       {
@@ -89,37 +89,13 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
         miscellaneous: [],
       },
     );
-  }, [projects]);
+  }, [projectsWithInfo]);
 
   const formatValue = (value: string): string => {
     if (value.includes('$')) {
       return value;
     }
     return value;
-  };
-
-  const getProjectIcon = (name: string): JSX.Element => {
-    if (name.toLowerCase().includes('rail') || name.toLowerCase().includes('railroad')) {
-      return <PiTrain />;
-    }
-    if (name.toLowerCase().includes('bridge')) {
-      return <GiSuspensionBridge />;
-    }
-    if (name.toLowerCase().includes('highway') || name.toLowerCase().includes('parkway') || name.toLowerCase().includes('section') || name.toLowerCase().includes('lanes')) {
-      return <FaRoad />;
-    }
-    if (name.toLowerCase().includes('tunnel')) {
-      return <TbBuildingTunnel />;
-    }
-    return <FaHardHat />; // Default fallback icon
-  };
-
-  const getProjectCategory = (name: string): string => {
-    if (name.toLowerCase().includes('rail') || name.toLowerCase().includes('railroad')) return 'High-Speed Rail';
-    if (name.toLowerCase().includes('bridge')) return 'Bridge Construction';
-    if (name.toLowerCase().includes('highway') || name.toLowerCase().includes('parkway') || name.toLowerCase().includes('section') || name.toLowerCase().includes('lanes')) return 'Highway Construction';
-    if (name.toLowerCase().includes('tunnel')) return 'Tunneling';
-    return 'Infrastructure';
   };
 
   return (
@@ -139,15 +115,15 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
 
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {projects.map((project, index) => (
+            {projectsWithInfo.map((project) => (
               <div
-                key={index}
+                key={project.name}
                 className="group bg-background rounded-xl p-6 border border-border shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 cursor-pointer"
                 onClick={() => setSelectedProject(project)}
               >
                 {/* Project Header */}
                 <div className="flex items-start justify-between mb-4">
-                  <div className="text-3xl text-primary">{getProjectIcon(project.name)}</div>
+                  <div className="text-3xl text-primary">{project.icon}</div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-primary">
                       {formatValue(project.value)}
@@ -159,7 +135,7 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                 {/* Project Info */}
                 <div className="mb-4">
                   <span className="inline-block px-2 py-1 bg-primary/10 border border-primary/20 rounded text-primary text-xs font-medium mb-2">
-                    {getProjectCategory(project.name)}
+                    {project.categoryLabel}
                   </span>
                   <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                     {project.name}
@@ -221,9 +197,9 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
               </div>
 
               <ul className="space-y-3">
-                {categorizedProjects[activeCategory].map((project, index) => (
+                {categorizedProjects[activeCategory].map((project) => (
                   <li
-                    key={`${activeCategory}-${index}`}
+                    key={`${activeCategory}-${project.name}`}
                     className="border border-border rounded-xl p-4 hover:border-primary/40 hover:shadow transition-colors"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
@@ -258,7 +234,7 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
               {/* Modal Header */}
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-start">
-                  <div className="text-4xl text-primary mr-4">{getProjectIcon(selectedProject.name)}</div>
+                  <div className="text-4xl text-primary mr-4">{(selectedProject as Project & ProjectInfo).icon}</div>
                   <div>
                     <h3 className="text-2xl font-bold text-foreground mb-2">{selectedProject.name}</h3>
                     <div className="flex items-center text-muted-foreground">
@@ -266,7 +242,7 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                         {formatValue(selectedProject.value)}
                       </span>
                       <span className="px-2 py-1 bg-primary/10 border border-primary/20 rounded text-primary text-sm">
-                        {getProjectCategory(selectedProject.name)}
+                        {(selectedProject as Project & ProjectInfo).categoryLabel}
                       </span>
                     </div>
                   </div>

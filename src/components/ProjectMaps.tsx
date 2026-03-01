@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import type { Project } from './KeyProjects';
+import { ResumeData } from '../types';
+
+type Project = ResumeData['key_projects'][0];
+
 import L, { LatLngExpression } from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';

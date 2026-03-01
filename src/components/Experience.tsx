@@ -35,7 +35,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences }) => {
             {/* Experience Items */}
             <div className="space-y-12">
               {experiences.map((exp, index) => (
-                <div key={index} className="relative flex items-start md:pl-12">
+                <div key={`${exp.position}-${exp.company}-${index}`} className="relative flex items-start md:pl-12">
                   {/* Timeline Dot */}
                   <div className="hidden md:flex absolute left-0 top-1 w-8 h-8 bg-background rounded-full border-4 border-primary items-center justify-center">
                     <div className="w-3 h-3 bg-primary rounded-full"></div>

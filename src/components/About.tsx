@@ -1,5 +1,5 @@
 import React from 'react';
-import profileImage from '../assets/profile.jpg';
+import profileImage from '../assets/Edu_github.jpg';
 
 interface AboutProps {
   data: {
@@ -26,7 +26,7 @@ const About: React.FC<AboutProps> = ({ data, achievements }) => {
                 <div className="w-80 h-80 rounded-lg overflow-hidden shadow-2xl">
                   <img 
                     src={profileImage} 
-                    alt="Eduardo Fernández Ortiz - Project Director"
+                    alt={data.full_name}
                     className="w-full h-full object-cover"
                   />
                 </div>
