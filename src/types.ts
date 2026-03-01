@@ -1,11 +1,75 @@
 import { z } from 'zod';
 
-export const ResumeDataSchema = z.object({
+export interface ResumeData {
+  personal_info: {
+    full_name: string;
+    credentials: string[];
+    current_title: string;
+    location: string;
+    cv_url?: string;
+    contact: {
+      phone: string;
+      email: string;
+      linkedin: string;
+    };
+    summary: string;
+    about_description: string;
+  };
+  core_competencies: string[];
+  work_experience: Array<{
+    position: string;
+    company: string;
+    location: string;
+    duration: string;
+    responsibilities: string[];
+  }>;
+  education: Array<{
+    degree: string;
+    institution: string;
+    year: string;
+    status?: string;
+  }>;
+  postgraduate_programs: Array<{
+    program: string;
+    institution: string;
+    year: string;
+  }>;
+  professional_certifications: Array<{
+    certification: string;
+    jurisdictions?: string[];
+    jurisdiction?: string;
+    country?: string;
+    issuing_organization?: string;
+    organization?: string;
+  }>;
+  key_projects: Array<{
+    name: string;
+    value: string;
+    role: string;
+    company: string;
+    location?: string;
+    client?: string;
+    contribution?: string;
+    achievement?: string;
+    scope?: string;
+  }>;
+  key_achievements: string[];
+  technical_expertise: {
+    delivery_models: string[];
+    project_types: string[];
+    technical_skills: string[];
+    technology_skills: string[];
+  };
+  leadership_skills: string[];
+}
+
+export const ResumeDataSchema: z.ZodType<ResumeData> = z.object({
   personal_info: z.object({
     full_name: z.string(),
     credentials: z.array(z.string()),
     current_title: z.string(),
     location: z.string(),
+    cv_url: z.string().optional(),
     contact: z.object({
       phone: z.string(),
       email: z.string(),
@@ -61,5 +125,3 @@ export const ResumeDataSchema = z.object({
   }),
   leadership_skills: z.array(z.string()),
 });
-
-export type ResumeData = z.infer<typeof ResumeDataSchema>;
