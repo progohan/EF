@@ -265,9 +265,9 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {markersForRegion.map((project, idx) => (
+          {markersForRegion.map((project) => (
             project &&
-            <Marker key={idx} position={project.coords}>
+            <Marker key={`${project.name}-${project.regionId}`} position={project.coords}>
               <Popup>
                 <b>{project.name}</b><br />
                 {project.location}

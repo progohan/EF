@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { FileDown } from 'lucide-react';
 
 interface ContactProps {
   data: {
     full_name: string;
     current_title: string;
     location: string;
+    cv_url?: string;
     contact: {
       phone: string;
       email: string;
@@ -59,6 +61,35 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
               
               {/* Contact Cards */}
               <div className="space-y-6">
+                {/* CV Download Card - HIGHLY VISIBLE */}
+                {data.cv_url && (
+                  <a 
+                    href={data.cv_url}
+                    download
+                    className="block p-6 bg-primary/5 rounded-xl border-2 border-primary/20 shadow-md hover:shadow-xl hover:border-primary/50 transition-all duration-300 group relative overflow-hidden"
+                  >
+                    <div className="absolute top-0 right-0 p-2">
+                      <div className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider animate-pulse">
+                        Available
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center mr-5 shadow-lg group-hover:scale-110 transition-transform">
+                        <FileDown className="w-8 h-8 text-primary-foreground" />
+                      </div>
+                      <div>
+                        <h4 className="text-foreground font-bold text-lg mb-1">Executive Resume</h4>
+                        <p className="text-primary font-medium flex items-center">
+                          Download CV (PDF)
+                          <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                )}
+
                 {/* Email */}
                 <a 
                   href={`mailto:${data.contact.email}`}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -8,20 +8,29 @@ import CoreCompetencies from './components/CoreCompetencies';
 import KeyProjects from './components/KeyProjects';
 import Education from './components/Education';
 import Contact from './components/Contact';
-import { ResumeData } from './types';
+import { ResumeData, ResumeDataSchema } from './types';
+import { AlertCircle } from 'lucide-react';
 
 function App() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('./data.json');
-        const data = await response.json();
-        setResumeData(data);
-      } catch (error) {
-        console.error('Error loading resume data:', error);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+        }
+        const jsonData = await response.json();
+        
+        // Validate data with Zod
+        const validatedData = ResumeDataSchema.parse(jsonData);
+        setResumeData(validatedData);
+      } catch (err) {
+        console.error('Error loading resume data:', err);
+        setError(err instanceof Error ? err.message : 'An unknown error occurred while loading data.');
       } finally {
         setLoading(false);
       }
@@ -33,15 +42,32 @@ function App() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="text-xl font-medium">Loading portfolio...</div>
+        </div>
       </div>
     );
   }
 
-  if (!resumeData) {
+  if (error || !resumeData) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="text-red-400 text-xl">Error loading data</div>
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-destructive/10 border border-destructive/20 rounded-xl p-8 text-center">
+          <div className="flex justify-center mb-4">
+            <AlertCircle className="text-destructive w-12 h-12" />
+          </div>
+          <h2 className="text-2xl font-bold mb-2">Error Loading Data</h2>
+          <p className="text-muted-foreground mb-6">
+            {error || 'Unable to load portfolio data. Please try again later.'}
+          </p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
@@ -50,35 +76,21 @@ function App() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
-        <section id="hero">
-          <Hero data={resumeData.personal_info} />
-        </section>
-        <section id="about">
-          <About data={resumeData.personal_info} achievements={resumeData.key_achievements} />
-        </section>
-        <section id="experience">
-          <Experience experiences={resumeData.work_experience} />
-        </section>
-        <section id="competencies">
-          <CoreCompetencies
-            competencies={resumeData.core_competencies}
-            technicalExpertise={resumeData.technical_expertise}
-            leadershipSkills={resumeData.leadership_skills}
-          />
-        </section>
-        <section id="projects">
-          <KeyProjects projects={resumeData.key_projects} />
-        </section>
-        <section id="education">
-          <Education 
-            education={resumeData.education} 
-            programs={resumeData.postgraduate_programs}
-            certifications={resumeData.professional_certifications}
-          />
-        </section>
-        <section id="contact">
-          <Contact data={resumeData.personal_info} />
-        </section>
+        <Hero data={resumeData.personal_info} />
+        <About data={resumeData.personal_info} achievements={resumeData.key_achievements} />
+        <Experience experiences={resumeData.work_experience} />
+        <CoreCompetencies
+          competencies={resumeData.core_competencies}
+          technicalExpertise={resumeData.technical_expertise}
+          leadershipSkills={resumeData.leadership_skills}
+        />
+        <KeyProjects projects={resumeData.key_projects} />
+        <Education 
+          education={resumeData.education} 
+          programs={resumeData.postgraduate_programs}
+          certifications={resumeData.professional_certifications}
+        />
+        <Contact data={resumeData.personal_info} />
       </main>
     </div>
   );

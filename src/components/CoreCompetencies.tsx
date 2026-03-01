@@ -4,7 +4,7 @@ import React from 'react';
 // Leadership & Management Competencies
 import { FiTarget } from "react-icons/fi"; // Strategic Planning & Execution
 import { GoProject, GoProjectSymlink } from "react-icons/go"; // Project & Program Management, Project Types header
-import { RiTeamFill, RiMoneyDollarCircleLine, RiRobot3Line } from "react-icons/ri"; // Cross-Functional Team Leadership, Cost Optimization, Emerging Technologies
+import { RiTeamFill, RiMoneyDollarCircleLine } from "react-icons/ri"; // Cross-Functional Team Leadership, Cost Optimization
 import { FaRegHandshake, FaRegLightbulb } from "react-icons/fa"; // Stakeholder Engagement, Innovation
 import { LiaFileContractSolid } from "react-icons/lia"; // Contract Negotiation
 import { AiOutlineThunderbolt } from "react-icons/ai"; // Risk Assessment
@@ -14,12 +14,7 @@ import { MdOutlineEngineering } from "react-icons/md"; // Civil Engineering
 import { GiTeamIdea, GiFireworkRocket } from "react-icons/gi"; // Mentorship, Technical Skills Header
 import { CiMedal } from "react-icons/ci"; // Leadership Skills header
 import { FaRegAddressBook } from "react-icons/fa"; // Delivery Models header
-import { TfiWorld } from "react-icons/tfi"; // International Projects
-import { BsSuitcaseLg } from "react-icons/bs"; // Executive Leadership
 
-// Note: The default '⭐' icon is not replaced directly here,
-// as getIcon will now return JSX, we'll use a specific default icon component if needed.
-// For now, we'll ensure all competencies have a mapped icon.
 // --- END REACT-ICONS IMPORTS ---
 
 interface CoreCompetenciesProps {
@@ -39,7 +34,6 @@ const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
   leadershipSkills,
 }) => {
   // Map competency names to their chosen React-Icon components
-  // Each function returns a JSX.Element (the icon component)
   const competencyIconMap: { [key: string]: JSX.Element } = {
     'Strategic Planning & Execution': <FiTarget />,
     'Project & Program Management': <GoProject />,
@@ -57,8 +51,7 @@ const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
   };
 
   const getIcon = (competency: string): JSX.Element => {
-    // Return the specific icon or a fallback if not found
-    return competencyIconMap[competency] || <GoProject />; // Using a sensible default if somehow a competency isn't mapped
+    return competencyIconMap[competency] || <GoProject />;
   };
 
   return (
@@ -77,7 +70,7 @@ const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
           </div>
 
           {/* Core Competencies Grid */}
-          <div className="mb-16">
+          <div className="mb-24">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {competencies.map((competency, index) => (
                 <div
@@ -161,6 +154,24 @@ const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Leadership Skills Section */}
+          <div className="mt-24">
+            <h3 className="text-2xl font-bold text-foreground mb-8 text-center flex items-center justify-center">
+              <span className="text-3xl mr-3 text-primary"><CiMedal /></span>
+              Leadership Skills
+            </h3>
+            <div className="flex flex-wrap justify-center gap-4">
+              {leadershipSkills.map((skill, index) => (
+                <span 
+                  key={index}
+                  className="px-6 py-3 bg-primary/5 border border-primary/20 rounded-xl text-foreground font-medium hover:bg-primary/10 transition-colors"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
           </div>
         </div>

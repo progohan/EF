@@ -1,4 +1,5 @@
 import React from 'react';
+import { FileDown } from 'lucide-react';
 
 interface HeroProps {
   data: {
@@ -7,6 +8,7 @@ interface HeroProps {
     current_title: string;
     location: string;
     summary: string;
+    cv_url?: string;
   };
 }
 
@@ -69,16 +71,28 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
           </p>
 
           {/* Call to Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button
               onClick={scrollToContact}
-              className="px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               Get In Touch
             </button>
+            
+            {data.cv_url && (
+              <a
+                href={data.cv_url}
+                download
+                className="w-full sm:w-auto px-8 py-4 bg-secondary text-secondary-foreground hover:bg-secondary/80 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md flex items-center justify-center gap-2"
+              >
+                <FileDown className="w-5 h-5" />
+                Download CV (PDF)
+              </a>
+            )}
+
             <button
               onClick={scrollToAbout}
-              className="px-8 py-4 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+              className="w-full sm:w-auto px-8 py-4 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
             >
               Learn More
             </button>
