@@ -21,7 +21,6 @@ const Experience: React.FC<ExperienceProps> = ({ experiences }) => {
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Professional Experience
             </h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
             <p className="text-muted-foreground mt-6 text-lg max-w-2xl mx-auto">
               Over two decades of leadership in infrastructure development across North America and Europe
             </p>
