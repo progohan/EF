@@ -48,7 +48,6 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Contact Eduardo
             </h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
             <p className="text-muted-foreground mt-6 text-lg max-w-3xl mx-auto">
               Ready to discuss your next infrastructure project or executive opportunity? Let's connect and explore how my expertise can drive your organization's success.
             </p>

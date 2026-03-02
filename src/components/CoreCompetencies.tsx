@@ -63,7 +63,6 @@ const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Core Competencies & Expertise
             </h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
             <p className="text-muted-foreground mt-6 text-lg max-w-3xl mx-auto">
               Comprehensive expertise spanning traditional civil engineering and cutting-edge technology integration
             </p>

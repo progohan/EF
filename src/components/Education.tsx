@@ -47,7 +47,6 @@ const Education: React.FC<EducationProps> = ({ education, programs, certificatio
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Education & Certifications
             </h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
             <p className="text-muted-foreground mt-6 text-lg max-w-3xl mx-auto">
               Comprehensive academic foundation and professional certifications supporting technical excellence and leadership
             </p>

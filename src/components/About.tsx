@@ -20,7 +20,6 @@ const About: React.FC<AboutProps> = ({ data, achievements }) => {
             <div className="lg:col-span-1 space-y-8">
               <div className="lg:text-left">
                 <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">About Me</h2>
-                <div className="w-24 h-1 bg-primary rounded-full"></div>
               </div>
               <div className="flex justify-center">
                 <div className="w-80 h-80 rounded-lg overflow-hidden shadow-2xl">
