@@ -54,11 +54,11 @@ const Experience: React.FC<ExperienceProps> = ({ experiences }) => {
   if (!activeExperience) return null;
 
   return (
-    <section id="experience" className="py-24 sm:py-32 bg-background">
+    <section id="experience" className="py-16 sm:py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Professional Experience
             </h2>
@@ -137,11 +137,11 @@ const Experience: React.FC<ExperienceProps> = ({ experiences }) => {
           </div>
 
           {/* Interactive Timeline Visualizer */}
-          <div className="mt-20 max-w-5xl mx-auto hidden md:block">
+          <div className="mt-16 max-w-5xl mx-auto hidden md:block">
             <h4 className="text-sm font-mono text-muted-foreground mb-8 text-center uppercase tracking-widest">
               Career Timeline
             </h4>
-            <div className="relative h-2 bg-muted rounded-full overflow-visible mb-12">
+            <div className="relative h-2 bg-muted rounded-full overflow-visible mb-8">
               {/* Year Markers */}
               {[2003, 2008, 2013, 2018, 2023, Math.ceil(totalRange.end)].map((year) => (
                 <div 

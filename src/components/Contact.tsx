@@ -40,11 +40,11 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
   };
 
   return (
-    <section id="contact" className="py-24 sm:py-32">
+    <section id="contact" className="py-16 sm:py-20">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Contact Eduardo
             </h2>
@@ -233,7 +233,7 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
       </div>
 
       {/* Footer */}
-      <footer className="mt-24 border-t border-border pt-8">
+      <footer className="mt-16 border-t border-border pt-8">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto text-center">
             <p className="text-muted-foreground text-sm">

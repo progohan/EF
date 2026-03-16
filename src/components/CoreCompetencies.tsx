@@ -55,11 +55,11 @@ const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
   };
 
   return (
-    <section id="competencies" className="py-24 sm:py-32">
+    <section id="competencies" className="py-16 sm:py-20">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Core Competencies & Expertise
             </h2>
@@ -69,7 +69,7 @@ const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
           </div>
 
           {/* Core Competencies Grid */}
-          <div className="mb-24">
+          <div className="mb-16">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {competencies.map((competency, index) => (
                 <div
@@ -157,7 +157,7 @@ const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
           </div>
 
           {/* Leadership Skills Section */}
-          <div className="mt-24">
+          <div className="mt-16">
             <h3 className="text-2xl font-bold text-foreground mb-8 text-center flex items-center justify-center">
               <span className="text-3xl mr-3 text-primary"><CiMedal /></span>
               Leadership Skills

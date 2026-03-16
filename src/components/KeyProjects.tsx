@@ -99,11 +99,11 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
   };
 
   return (
-    <section id="projects" className="py-24 sm:py-32 bg-muted/50">
+    <section id="projects" className="py-16 sm:py-20 bg-muted/50">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Key Projects
             </h2>

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import profileImage from '../assets/Edu_github.jpg';
 
@@ -12,15 +13,17 @@ interface AboutProps {
 
 const About: React.FC<AboutProps> = ({ data, achievements }) => {
   return (
-    <section id="about" className="py-24 sm:py-32">
+    <section id="about" className="py-16 sm:py-20">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
+          {/* Section Header */}
+          <div className="text-center mb-10">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">About Me</h2>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16 items-start">
-            {/* Left Column: Title and Image */}
+            {/* Left Column: Image */}
             <div className="lg:col-span-1 space-y-8">
-              <div className="lg:text-left">
-                <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">About Me</h2>
-              </div>
               <div className="flex justify-center">
                 <div className="w-80 h-80 rounded-lg overflow-hidden shadow-2xl">
                   <img 
