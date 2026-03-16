@@ -43,6 +43,17 @@
     --radius: 0.5rem;
   }
 
+  /* Utility to hide scrollbars */
+  @layer utilities {
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+  }
+
   .dark {
     --background: 222 83% 4%;
     --foreground: 210 40% 98%;
