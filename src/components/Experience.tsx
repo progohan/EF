@@ -25,14 +25,14 @@ const Experience: React.FC<ExperienceProps> = ({ experiences }) => {
     if (!match) return 2003;
     
     const month = match[1] ? parseInt(match[1]) - 1 : 0;
-    const year = parseInt(match[2]);
+    const year = parseInt(match[2] || "0");
     return year + month / 12;
   };
 
   const getRange = (duration: string) => {
     // Split by hyphen or en-dash with optional spaces
     const parts = duration.split(/\s*[-–]\s*/);
-    const start = getDecimalYear(parts[0]);
+    const start = getDecimalYear(parts[0] || "");
     const end = parts[1] ? getDecimalYear(parts[1]) : start;
     return { start, end };
   };
@@ -46,10 +46,12 @@ const Experience: React.FC<ExperienceProps> = ({ experiences }) => {
     if (parts[0] === 'SNC' || parts[0] === 'Isolux' || parts[0] === 'Flatiron' || parts[0] === 'Team') {
       return `${parts[0]} ${parts[1] || ''}`.trim().replace(/,/g, '');
     }
-    return parts[0].replace(/,/g, '');
+    return (parts[0] || '').replace(/,/g, '');
   };
 
   const activeExperience = experiences[activeTab];
+
+  if (!activeExperience) return null;
 
   return (
     <section id="experience" className="py-24 sm:py-32 bg-background">
