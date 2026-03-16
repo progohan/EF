@@ -28,11 +28,11 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
   };
 
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center py-32">
+    <section id="hero" className="min-h-screen flex items-center justify-center py-16 sm:py-20">
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Credentials */}
-          <div className="mb-6">
+          <div className="mb-4">
             <div className="inline-flex flex-wrap gap-2 justify-center">
               {data.credentials.map((credential, index) => (
                 <span 
@@ -56,7 +56,7 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
           </h2>
 
           {/* Location */}
-          <div className="flex items-center justify-center mb-10 text-muted-foreground">
+          <div className="flex items-center justify-center mb-8 text-muted-foreground">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -66,7 +66,7 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
           </div>
 
           {/* Summary */}
-          <p className="text-lg md:text-xl text-foreground/80 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-foreground/80 mb-8 max-w-3xl mx-auto leading-relaxed">
             {data.summary}
           </p>
 
