@@ -1,21 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-// --- REACT-ICONS IMPORTS ---
-// Leadership & Management Competencies
-import { FiTarget } from "react-icons/fi"; // Strategic Planning & Execution
-import { GoProject, GoProjectSymlink } from "react-icons/go"; // Project & Program Management, Project Types header
-import { RiTeamFill, RiMoneyDollarCircleLine } from "react-icons/ri"; // Cross-Functional Team Leadership, Cost Optimization
-import { FaRegHandshake, FaRegLightbulb } from "react-icons/fa"; // Stakeholder Engagement, Innovation
-import { LiaFileContractSolid } from "react-icons/lia"; // Contract Negotiation
-import { AiOutlineThunderbolt } from "react-icons/ai"; // Risk Assessment
-import { FaDatabase } from "react-icons/fa6"; // Big Data Analytics
-import { FaCloud, FaSuitcase, FaLaptopCode } from "react-icons/fa"; // Cloud Computing, Commercial Management, Technology Skills
-import { MdOutlineEngineering } from "react-icons/md"; // Civil Engineering
-import { GiTeamIdea, GiFireworkRocket } from "react-icons/gi"; // Mentorship, Technical Skills Header
-import { CiMedal } from "react-icons/ci"; // Leadership Skills header
-import { FaRegAddressBook } from "react-icons/fa"; // Delivery Models header
-
-// --- END REACT-ICONS IMPORTS ---
+import { FiTarget } from "react-icons/fi";
+import { GoProject } from "react-icons/go";
+import { RiTeamFill, RiMoneyDollarCircleLine } from "react-icons/ri";
+import { FaRegHandshake, FaRegLightbulb } from "react-icons/fa";
+import { LiaFileContractSolid } from "react-icons/lia";
+import { AiOutlineThunderbolt } from "react-icons/ai";
+import { FaDatabase } from "react-icons/fa6";
+import { FaCloud, FaSuitcase } from "react-icons/fa";
+import { MdOutlineEngineering } from "react-icons/md";
+import { GiTeamIdea } from "react-icons/gi";
 
 interface CoreCompetenciesProps {
   competencies: string[];
@@ -28,150 +22,231 @@ interface CoreCompetenciesProps {
   leadershipSkills: string[];
 }
 
-const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
-  competencies,
-  technicalExpertise,
-  leadershipSkills,
-}) => {
-  // Map competency names to their chosen React-Icon components
-  const competencyIconMap: { [key: string]: JSX.Element } = {
-    'Strategic Planning & Execution': <FiTarget />,
-    'Project & Program Management': <GoProject />,
-    'Cross-Functional Team Leadership': <RiTeamFill />,
-    'Stakeholder Engagement & Communication': <FaRegHandshake />,
-    'Cost Optimization & Value Engineering': <RiMoneyDollarCircleLine />,
-    'Contract Negotiation & Management': <LiaFileContractSolid />,
-    'Risk Assessment & Mitigation': <AiOutlineThunderbolt />,
-    'Big Data Analytics & AI Applications': <FaDatabase />,
-    'Cloud Computing Architectures (AWS & Azure)': <FaCloud />,
-    'Commercial Management': <FaSuitcase />,
-    'Civil Engineering': <MdOutlineEngineering />,
-    'Mentorship & Team Development': <GiTeamIdea />,
-    'Innovation & Continuous Improvement': <FaRegLightbulb />
-  };
+type PillarKey = 'leadership' | 'engineering' | 'digital';
 
-  const getIcon = (competency: string): JSX.Element => {
-    return competencyIconMap[competency] || <GoProject />;
-  };
+interface CompetencyCard {
+  label: string;
+  description: string;
+  icon: JSX.Element;
+  pillar: PillarKey;
+}
+
+const COMPETENCY_CARDS: CompetencyCard[] = [
+  // Leadership & Commercial
+  {
+    label: 'Strategic Planning & Execution',
+    description: 'Directing multi-year programs from capture through closeout across multiple geographies and jurisdictions.',
+    icon: <FiTarget />,
+    pillar: 'leadership',
+  },
+  {
+    label: 'Cross-Functional Team Leadership',
+    description: 'Building and guiding high-performing, multidisciplinary teams that thrive under the pressure of megaproject delivery.',
+    icon: <RiTeamFill />,
+    pillar: 'leadership',
+  },
+  {
+    label: 'Stakeholder Engagement & Communication',
+    description: 'Bridging technical, legal, and commercial interests across owners, JV partners, regulatory agencies, and communities.',
+    icon: <FaRegHandshake />,
+    pillar: 'leadership',
+  },
+  {
+    label: 'Contract Negotiation & Management',
+    description: 'Structuring and administering complex contracts across DB, P3, CMAR, and PDB frameworks to protect value and manage exposure.',
+    icon: <LiaFileContractSolid />,
+    pillar: 'leadership',
+  },
+  {
+    label: 'Commercial Management',
+    description: 'Driving revenue, margin, and market share in competitive infrastructure markets through strategic positioning and pursuit leadership.',
+    icon: <FaSuitcase />,
+    pillar: 'leadership',
+  },
+  {
+    label: 'Mentorship & Team Development',
+    description: 'Cultivating leadership pipelines, resilient organizational cultures, and high-retention teams across international programs.',
+    icon: <GiTeamIdea />,
+    pillar: 'leadership',
+  },
+  // Engineering & Delivery
+  {
+    label: 'Project & Program Management',
+    description: 'Overseeing scope, schedule, cost, and quality on billion-dollar infrastructure programs with complex multi-stakeholder interfaces.',
+    icon: <GoProject />,
+    pillar: 'engineering',
+  },
+  {
+    label: 'Cost Optimization & Value Engineering',
+    description: 'Identifying savings and efficiencies at every project phase without compromising technical integrity or delivery timelines.',
+    icon: <RiMoneyDollarCircleLine />,
+    pillar: 'engineering',
+  },
+  {
+    label: 'Risk Assessment & Mitigation',
+    description: 'Anticipating, quantifying, and neutralizing project risk before it translates into schedule delay or cost overrun.',
+    icon: <AiOutlineThunderbolt />,
+    pillar: 'engineering',
+  },
+  {
+    label: 'Civil Engineering',
+    description: 'Deep technical foundation in structural design, geotechnical analysis, and large-scale infrastructure construction.',
+    icon: <MdOutlineEngineering />,
+    pillar: 'engineering',
+  },
+  // Digital & Innovation
+  {
+    label: 'Big Data Analytics & AI Applications',
+    description: 'Applying advanced analytics and AI tools to program controls, performance forecasting, and operational decision-making.',
+    icon: <FaDatabase />,
+    pillar: 'digital',
+  },
+  {
+    label: 'Cloud Computing Architectures (AWS & Azure)',
+    description: 'Leveraging cloud platforms to modernize project delivery workflows, data pipelines, and cross-team collaboration.',
+    icon: <FaCloud />,
+    pillar: 'digital',
+  },
+  {
+    label: 'Innovation & Continuous Improvement',
+    description: 'Embedding a culture of process improvement and emerging technology adoption across project teams and enterprise operations.',
+    icon: <FaRegLightbulb />,
+    pillar: 'digital',
+  },
+];
+
+const PILLARS: { key: PillarKey; label: string; description: string }[] = [
+  {
+    key: 'leadership',
+    label: 'Leadership & Commercial',
+    description: 'Executive presence, stakeholder trust, and commercial strategy that win work and drive enterprise growth.',
+  },
+  {
+    key: 'engineering',
+    label: 'Engineering & Delivery',
+    description: 'Technical rigor and program management discipline applied to the most complex infrastructure programs in North America and Europe.',
+  },
+  {
+    key: 'digital',
+    label: 'Digital & Innovation',
+    description: 'Data, cloud, and AI capabilities that modernize how infrastructure is planned, controlled, and delivered.',
+  },
+];
+
+
+const CoreCompetencies: React.FC<CoreCompetenciesProps> = ({
+  technicalExpertise,
+}) => {
+  const [activePillar, setActivePillar] = useState<PillarKey>('leadership');
+
+  const visibleCards = COMPETENCY_CARDS.filter(c => c.pillar === activePillar);
+  const activePillarDef = PILLARS.find(p => p.key === activePillar)!;
+
+  const allTechnicalSkills = [
+    ...technicalExpertise.technical_skills,
+    ...technicalExpertise.technology_skills,
+  ];
 
   return (
     <section id="competencies" className="py-16 sm:py-20">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
+
           {/* Section Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Core Competencies & Expertise
             </h2>
             <p className="text-muted-foreground mt-6 text-lg max-w-3xl mx-auto">
-              Comprehensive expertise spanning traditional civil engineering and cutting-edge technology integration
+              A rare combination of executive leadership, deep engineering knowledge, and digital fluency — applied to the world's most complex infrastructure programs.
             </p>
           </div>
 
-          {/* Core Competencies Grid */}
-          <div className="mb-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {competencies.map((competency, index) => (
-                <div
-                  key={index}
-                  className="p-6 bg-background rounded-xl border border-border shadow-sm hover:shadow-lg transition-shadow duration-300"
-                >
-                  <div className="flex items-start">
-                    <span className="text-2xl text-primary mr-4 mt-1">{getIcon(competency)}</span>
-                    <div>
-                      <h4 className="text-foreground font-semibold leading-tight">{competency}</h4>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* Pillar Tabs */}
+          <div className="flex flex-wrap justify-center gap-3 mb-4">
+            {PILLARS.map((pillar) => (
+              <button
+                key={pillar.key}
+                type="button"
+                onClick={() => setActivePillar(pillar.key)}
+                className={`px-5 py-2.5 text-sm font-semibold rounded-full border transition-colors ${
+                  activePillar === pillar.key
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-muted text-muted-foreground border-border hover:text-foreground'
+                }`}
+              >
+                {pillar.label}
+              </button>
+            ))}
           </div>
 
-          {/* Technical Expertise */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-16">
-            {/* Delivery Models & Project Types */}
-            <div className="space-y-10">
-              <div>
-                <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center">
-                  <span className="text-2xl mr-3 text-primary"><FaRegAddressBook /></span>
-                  Delivery Models
-                </h3>
-                <div className="space-y-3">
-                  {technicalExpertise.delivery_models.map((model, index) => (
-                    <div key={index} className="flex items-center p-3 bg-muted/50 rounded-lg border border-border">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                      <span className="text-foreground/90">{model}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          {/* Active Pillar Description */}
+          <p className="text-center text-muted-foreground text-sm mb-8 max-w-2xl mx-auto">
+            {activePillarDef.description}
+          </p>
 
-              <div>
-                <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center">
-                  <span className="text-2xl mr-3 text-primary"><GoProjectSymlink /></span>
-                  Project Types
-                </h3>
-                <div className="space-y-3">
-                  {technicalExpertise.project_types.map((type, index) => (
-                    <div key={index} className="flex items-center p-3 bg-muted/50 rounded-lg border border-border">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                      <span className="text-foreground/90">{type}</span>
-                    </div>
-                  ))}
+          {/* Competency Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {visibleCards.map((card) => (
+              <div
+                key={card.label}
+                className="p-6 bg-background rounded-xl border border-border shadow-sm hover:shadow-lg hover:border-primary/40 transition-all duration-300"
+              >
+                <div className="flex items-start mb-3">
+                  <span className="text-2xl text-primary mr-3 mt-0.5 shrink-0">{card.icon}</span>
+                  <h4 className="text-foreground font-semibold leading-tight">{card.label}</h4>
                 </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {card.description}
+                </p>
               </div>
-            </div>
-
-            {/* Skills */}
-            <div className="space-y-10">
-              <div>
-                <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center">
-                  <span className="text-2xl mr-3 text-primary"><GiFireworkRocket /></span>
-                  Technical Skills
-                </h3>
-                <div className="space-y-3">
-                  {technicalExpertise.technical_skills.map((skill, index) => (
-                    <div key={index} className="flex items-center p-3 bg-muted/50 rounded-lg border border-border">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                      <span className="text-foreground/90">{skill}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center">
-                  <span className="text-2xl mr-3 text-primary"><FaLaptopCode /></span>
-                  Technology Skills
-                </h3>
-                <div className="space-y-3">
-                  {technicalExpertise.technology_skills.map((skill, index) => (
-                    <div key={index} className="flex items-center p-3 bg-muted/50 rounded-lg border border-border">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                      <span className="text-foreground/90">{skill}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Leadership Skills Section */}
-          <div className="mt-16">
-            <h3 className="text-2xl font-bold text-foreground mb-8 text-center flex items-center justify-center">
-              <span className="text-3xl mr-3 text-primary"><CiMedal /></span>
-              Leadership Skills
-            </h3>
-            <div className="flex flex-wrap justify-center gap-4">
-              {leadershipSkills.map((skill, index) => (
-                <span 
-                  key={index}
-                  className="px-6 py-3 bg-primary/5 border border-primary/20 rounded-xl text-foreground font-medium hover:bg-primary/10 transition-colors"
-                >
-                  {skill}
-                </span>
-              ))}
+          {/* Bottom Row: Delivery Models | Project Types | Technical Skills */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+            {/* Delivery Models — pill badges */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Delivery Models</h3>
+              <div className="flex flex-wrap gap-2">
+                {technicalExpertise.delivery_models.map((model) => (
+                  <span
+                    key={model}
+                    className="px-4 py-2 bg-primary/10 border border-primary/25 rounded-full text-primary text-sm font-semibold"
+                  >
+                    {model}
+                  </span>
+                ))}
+              </div>
             </div>
+
+            {/* Project Types */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Project Types</h3>
+              <ul className="space-y-2">
+                {technicalExpertise.project_types.map((type) => (
+                  <li key={type} className="flex items-center text-foreground/90 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3 shrink-0"></div>
+                    {type}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Technical + Technology Skills merged */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Technical Skills</h3>
+              <ul className="space-y-2">
+                {allTechnicalSkills.map((skill) => (
+                  <li key={skill} className="flex items-center text-foreground/90 text-sm">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3 shrink-0"></div>
+                    {skill}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
           </div>
         </div>
       </div>
