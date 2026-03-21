@@ -15,6 +15,7 @@ interface KeyProjectsProps {
 }
 
 type ProjectCategoryKey = 'highways' | 'railways' | 'miscellaneous';
+type FilterKey = 'all' | ProjectCategoryKey;
 
 interface ProjectInfo {
   categoryKey: ProjectCategoryKey;
@@ -22,19 +23,11 @@ interface ProjectInfo {
   icon: JSX.Element;
 }
 
-const categoryConfig: Record<ProjectCategoryKey, { label: string; description: string }> = {
-  highways: {
-    label: 'Highways',
-    description: 'Major roadway, express lane, and bridge programs delivering critical mobility improvements.',
-  },
-  railways: {
-    label: 'Railways',
-    description: 'High-speed rail, commuter rail, and tramway systems enabling reliable passenger connections.',
-  },
-  miscellaneous: {
-    label: 'Miscellaneous',
-    description: 'Specialty infrastructure and multi-disciplinary programs beyond traditional rail and highway scopes.',
-  },
+const filterConfig: Record<FilterKey, { label: string }> = {
+  all: { label: 'All Projects' },
+  highways: { label: 'Highways' },
+  railways: { label: 'Railways' },
+  miscellaneous: { label: 'Miscellaneous' },
 };
 
 const getProjectInfo = (project: Project): ProjectInfo => {
@@ -69,27 +62,20 @@ const getProjectInfo = (project: Project): ProjectInfo => {
   return { categoryKey: 'miscellaneous', categoryLabel: 'Infrastructure', icon: <FaHardHat /> };
 };
 
+const FILTER_KEYS: FilterKey[] = ['all', 'highways', 'railways', 'miscellaneous'];
+
 const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [activeCategory, setActiveCategory] = useState<ProjectCategoryKey>('highways');
+  const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
 
   const projectsWithInfo = useMemo(() => {
     return projects.map(p => ({ ...p, ...getProjectInfo(p) }));
   }, [projects]);
 
-  const categorizedProjects = useMemo(() => {
-    return projectsWithInfo.reduce<Record<ProjectCategoryKey, (Project & ProjectInfo)[]>>(
-      (acc, project) => {
-        acc[project.categoryKey] = [...acc[project.categoryKey], project];
-        return acc;
-      },
-      {
-        highways: [],
-        railways: [],
-        miscellaneous: [],
-      },
-    );
-  }, [projectsWithInfo]);
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === 'all') return projectsWithInfo;
+    return projectsWithInfo.filter(p => p.categoryKey === activeFilter);
+  }, [projectsWithInfo, activeFilter]);
 
   const handleProjectKeyDown = (e: React.KeyboardEvent, project: Project) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -112,9 +98,23 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
             </p>
           </div>
 
+          {/* Category Filter Tabs */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {FILTER_KEYS.map((key) => (
+              <Button
+                key={key}
+                variant={activeFilter === key ? 'default' : 'outline'}
+                onClick={() => setActiveFilter(key)}
+                className="min-w-[130px]"
+              >
+                {filterConfig[key].label}
+              </Button>
+            ))}
+          </div>
+
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {projectsWithInfo.map((project) => (
+            {filteredProjects.map((project) => (
               <div
                 key={project.name}
                 className="group bg-background rounded-xl p-6 border border-border shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -167,64 +167,6 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                 )}
               </div>
             ))}
-          </div>
-
-          <div className="bg-background border border-border rounded-2xl shadow-sm p-8">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-semibold text-foreground">Explore My Project Portfolio</h3>
-              <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
-                Browse flagship programs organized by focus area. Select a category to see the projects I&apos;ve led across highways,
-                rail corridors, and multidisciplinary initiatives.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
-              {Object.entries(categoryConfig).map(([key, value]) => (
-                <Button
-                  key={key}
-                  variant={activeCategory === key ? 'default' : 'outline'}
-                  onClick={() => setActiveCategory(key as ProjectCategoryKey)}
-                  className="min-w-[150px]"
-                >
-                  {value.label}
-                </Button>
-              ))}
-            </div>
-
-            <div className="max-w-3xl mx-auto text-left">
-              <div className="mb-4">
-                <h4 className="text-lg font-semibold text-foreground">{categoryConfig[activeCategory].label}</h4>
-                <p className="text-muted-foreground text-sm">
-                  {categoryConfig[activeCategory].description}
-                </p>
-              </div>
-
-              <ul className="space-y-3">
-                {categorizedProjects[activeCategory].map((project) => (
-                  <li
-                    key={`${activeCategory}-${project.name}`}
-                    className="border border-border rounded-xl p-4 hover:border-primary/40 hover:shadow transition-colors"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <div>
-                        <p className="text-base font-medium text-foreground">{project.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {project.role} · {project.company}
-                        </p>
-                      </div>
-                      {project.value && (
-                        <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
-                          {project.value}
-                        </span>
-                      )}
-                    </div>
-                    {project.scope && (
-                      <p className="text-sm text-muted-foreground mt-2">{project.scope}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </div>
       </div>

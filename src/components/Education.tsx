@@ -1,4 +1,10 @@
 import React from 'react';
+import { MdOutlineSchool, MdOutlineEngineering, MdVerified } from 'react-icons/md';
+import { FaBriefcase, FaCloud, FaDatabase, FaGavel } from 'react-icons/fa';
+import { PiCertificateBold, PiMathOperationsBold } from 'react-icons/pi';
+import { GiBrain } from 'react-icons/gi';
+import { TbBuildingBridge } from 'react-icons/tb';
+import { MdLocationOn } from 'react-icons/md';
 
 interface EducationProps {
   education: Array<{
@@ -22,91 +28,135 @@ interface EducationProps {
   }>;
 }
 
-const Education: React.FC<EducationProps> = ({ education, programs, certifications }) => {
-  const getDegreeIcon = (degree: string): string => {
-    if (degree.toLowerCase().includes('law')) return '⚖️';
-    if (degree.toLowerCase().includes('mba') || degree.toLowerCase().includes('business')) return '💼';
-    if (degree.toLowerCase().includes('engineering') || degree.toLowerCase().includes('math')) return '⚙️';
-    if (degree.toLowerCase().includes('intelligence')) return '🧠';
-    return '🎓';
-  };
+// Credential badges shown at the top — derived from the most prominent qualifications
+const CREDENTIAL_BADGES = [
+  { abbr: 'PE', label: 'Professional Engineer' },
+  { abbr: 'P.Eng', label: 'Professional Engineer (Canada)' },
+  { abbr: 'PMP', label: 'Project Management Professional' },
+  { abbr: 'MSCE', label: 'Master of Science in Civil Engineering' },
+  { abbr: 'MBA', label: 'Executive MBA' },
+  { abbr: 'LLB', label: 'Bachelor of Law' },
+];
 
-  const getCertificationIcon = (cert: string): string => {
-    if (cert.includes('P.E.') || cert.includes('P.Eng.')) return '🏗️';
-    if (cert.includes('PMP')) return '📊';
-    if (cert.includes('Contractor')) return '🔨';
-    return '📋';
-  };
+const getDegreeIcon = (text: string): JSX.Element => {
+  const t = text.toLowerCase();
+  if (t.includes('law')) return <FaGavel />;
+  if (t.includes('mba') || t.includes('business')) return <FaBriefcase />;
+  if (t.includes('civil engineering') || t.includes('science in civil')) return <MdOutlineEngineering />;
+  if (t.includes('math') || t.includes('computation')) return <PiMathOperationsBold />;
+  if (t.includes('intelligence')) return <GiBrain />;
+  if (t.includes('cloud') || t.includes('aws') || t.includes('azure')) return <FaCloud />;
+  if (t.includes('data') || t.includes('ai') || t.includes('artificial')) return <FaDatabase />;
+  if (t.includes('steel') || t.includes('composite') || t.includes('struct')) return <TbBuildingBridge />;
+  return <MdOutlineSchool />;
+};
+
+const Education: React.FC<EducationProps> = ({ education, programs, certifications }) => {
+  // Merge academic + postgraduate into one timeline, sorted oldest → newest
+  const allAcademic = [
+    ...education.map(e => ({
+      title: e.degree,
+      institution: e.institution,
+      year: parseInt(e.year),
+      yearLabel: e.year,
+      status: e.status,
+      type: 'degree' as const,
+    })),
+    ...programs.map(p => ({
+      title: p.program,
+      institution: p.institution,
+      year: parseInt(p.year),
+      yearLabel: p.year,
+      status: undefined,
+      type: 'program' as const,
+    })),
+  ].sort((a, b) => a.year - b.year);
 
   return (
     <section id="education" className="py-16 sm:py-20 bg-muted/50">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
+
           {/* Section Header */}
           <div className="text-center mb-10">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Education & Certifications
             </h2>
             <p className="text-muted-foreground mt-6 text-lg max-w-3xl mx-auto">
-              Comprehensive academic foundation and professional certifications supporting technical excellence and leadership
+              Two decades of deliberate, cross-disciplinary learning — from civil engineering to business law, underpinned by active professional licensure across three countries.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-16">
-            {/* Education & Programs Column*/}
-            <div className="space-y-12">
-              <div>
-                <h3 className="text-2xl font-semibold text-foreground mb-8 flex items-center">
-                  <span className="text-3xl mr-3">🎓</span>
-                  Academic Education
-                </h3>
-                <div className="space-y-6">
-                  {education.map((edu, index) => (
-                    <div 
-                      key={index}
-                      className="p-6 bg-background rounded-xl border border-border shadow-sm"
-                    >
-                      <div className="flex items-start">
-                        <div className="text-2xl mr-4 mt-1">{getDegreeIcon(edu.degree)}</div>
-                        <div className="flex-1">
-                          <h4 className="text-lg font-semibold text-foreground mb-1">{edu.degree}</h4>
-                          <p className="text-primary/90 font-medium mb-2">{edu.institution}</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground text-sm">{edu.year}</span>
-                            {edu.status && (
-                              <span className="px-2 py-1 bg-green-500/10 border border-green-500/20 rounded text-green-600 text-xs">
-                                {edu.status}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          {/* Credential Badge Strip */}
+          <div className="flex flex-wrap justify-center gap-3 mb-14">
+            {CREDENTIAL_BADGES.map((badge) => (
+              <div
+                key={badge.abbr}
+                className="group relative px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-bold shadow-sm cursor-default"
+                title={badge.label}
+              >
+                {badge.abbr}
+                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs bg-foreground text-background px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  {badge.label}
+                </span>
               </div>
+            ))}
+          </div>
 
-              <div>
-                <h3 className="text-2xl font-semibold text-foreground mb-8 flex items-center">
-                  <span className="text-3xl mr-3">📚</span>
-                  Postgraduate Programs
-                </h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12">
+
+            {/* Left: Unified Academic Timeline */}
+            <div>
+              <h3 className="text-xl font-semibold text-foreground mb-8 flex items-center gap-3">
+                <MdOutlineSchool className="text-2xl text-primary" />
+                Academic Background
+              </h3>
+
+              <div className="relative">
+                {/* Vertical line */}
+                <div className="absolute left-[18px] top-0 bottom-0 w-px bg-border" />
+
                 <div className="space-y-6">
-                  {programs.map((program, index) => (
-                    <div 
-                      key={index}
-                      className="p-6 bg-background rounded-xl border border-border shadow-sm"
-                    >
-                      <div className="flex items-start">
-                        <div className="text-2xl mr-4 mt-1">
-                          {program.program.toLowerCase().includes('cloud') ? '☁️' : 
-                          program.program.toLowerCase().includes('data') || program.program.toLowerCase().includes('ai') ? '🤖' : 
-                          program.program.toLowerCase().includes('steel') ? '🏗️' : '📖'}
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-lg font-semibold text-foreground mb-1">{program.program}</h4>
-                          <p className="text-primary/90 font-medium mb-2">{program.institution}</p>
-                          <span className="text-muted-foreground text-sm">{program.year}</span>
+                  {allAcademic.map((item, index) => (
+                    <div key={index} className="flex gap-5">
+                      {/* Timeline dot */}
+                      <div className="relative shrink-0 w-9 flex justify-center">
+                        <div className="w-4 h-4 rounded-full bg-primary border-2 border-background ring-2 ring-primary/30 mt-1 z-10" />
+                      </div>
+
+                      {/* Card */}
+                      <div className="flex-1 pb-2">
+                        <div className="bg-background rounded-xl border border-border p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200">
+                          <div className="flex items-start gap-3">
+                            <span className="text-xl text-primary mt-0.5 shrink-0">
+                              {getDegreeIcon(item.title)}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-2 mb-1">
+                                <h4 className="text-sm font-semibold text-foreground leading-snug">
+                                  {item.title}
+                                </h4>
+                                {item.status && (
+                                  <span className="shrink-0 px-2 py-0.5 bg-green-500/10 border border-green-500/20 rounded text-green-600 text-xs font-medium">
+                                    {item.status}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-primary/80 text-sm font-medium mb-1">
+                                {item.institution}
+                              </p>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-muted-foreground">{item.yearLabel}</span>
+                                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                                  item.type === 'degree'
+                                    ? 'bg-primary/10 text-primary'
+                                    : 'bg-muted text-muted-foreground'
+                                }`}>
+                                  {item.type === 'degree' ? 'Degree' : 'PG Program'}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -115,46 +165,63 @@ const Education: React.FC<EducationProps> = ({ education, programs, certificatio
               </div>
             </div>
 
-            {/* Professional Certifications Column*/}
+            {/* Right: Certifications */}
             <div>
-              <h3 className="text-2xl font-semibold text-foreground mb-8 flex items-center">
-                <span className="text-3xl mr-3">🏆</span>
+              <h3 className="text-xl font-semibold text-foreground mb-8 flex items-center gap-3">
+                <PiCertificateBold className="text-2xl text-primary" />
                 Professional Certifications
               </h3>
-              <div className="space-y-6">
+
+              <div className="space-y-5">
                 {certifications.map((cert, index) => (
-                  <div 
+                  <div
                     key={index}
-                    className="p-6 bg-background rounded-xl border border-border shadow-sm"
+                    className="bg-background rounded-xl border border-border p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200"
                   >
-                    <div className="flex items-start">
-                      <div className="text-2xl mr-4 mt-1">{getCertificationIcon(cert.certification)}</div>
-                      <div className="flex-1">
-                        <h4 className="text-lg font-semibold text-foreground mb-2">{cert.certification}</h4>
-                        
+                    <div className="flex items-start gap-4">
+                      <MdVerified className="text-2xl text-primary shrink-0 mt-0.5" />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-semibold text-foreground mb-1">
+                          {cert.certification}
+                        </h4>
+
                         {(cert.issuing_organization || cert.organization) && (
-                          <p className="text-primary/90 font-medium mb-2">{cert.issuing_organization || cert.organization}</p>
+                          <p className="text-primary/80 text-sm font-medium mb-3">
+                            {cert.issuing_organization || cert.organization}
+                          </p>
                         )}
 
-                        <div className="space-y-2">
-                          {cert.country && (
-                            <p className="text-muted-foreground text-sm">Country: {cert.country}</p>
-                          )}
-                          
+                        <div className="space-y-2.5">
+                          {/* Single jurisdiction */}
                           {cert.jurisdiction && (
-                            <p className="text-muted-foreground text-sm">Jurisdiction: {cert.jurisdiction}</p>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <MdLocationOn className="text-base shrink-0" />
+                              <span>{cert.jurisdiction}{cert.country ? `, ${cert.country}` : ''}</span>
+                            </div>
                           )}
-                          
+
+                          {/* Country only (no specific jurisdiction) */}
+                          {cert.country && !cert.jurisdiction && !cert.jurisdictions && (
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <MdLocationOn className="text-base shrink-0" />
+                              <span>{cert.country}</span>
+                            </div>
+                          )}
+
+                          {/* Multiple jurisdictions */}
                           {cert.jurisdictions && cert.jurisdictions.length > 0 && (
-                            <div className="text-muted-foreground text-sm">
-                              <span>Jurisdictions: </span>
-                              <div className="flex flex-wrap gap-1.5 mt-1">
-                                {cert.jurisdictions.map((jurisdiction, jIndex) => (
-                                  <span 
+                            <div>
+                              <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
+                                <MdLocationOn className="text-sm shrink-0" />
+                                Licensed in {cert.jurisdictions.length} US states:
+                              </p>
+                              <div className="flex flex-wrap gap-1.5">
+                                {cert.jurisdictions.map((j, jIndex) => (
+                                  <span
                                     key={jIndex}
-                                    className="px-2 py-0.5 bg-primary/10 border border-primary/20 rounded text-primary text-xs"
+                                    className="px-2.5 py-0.5 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-semibold"
                                   >
-                                    {jurisdiction}
+                                    {j}
                                   </span>
                                 ))}
                               </div>
@@ -168,6 +235,7 @@ const Education: React.FC<EducationProps> = ({ education, programs, certificatio
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
