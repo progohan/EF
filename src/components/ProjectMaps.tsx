@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import { ResumeData } from '../types';
 
 type Project = ResumeData['key_projects'][0];
@@ -82,114 +83,114 @@ const REGION_DEFINITIONS: Record<RegionId, RegionDefinition> = {
 };
 
 const PROJECT_LOCATIONS: ProjectLocationDefinition[] = [
-    {
-        keywords: ['long bridge north'],
-        coords: { lon: -77.04, lat: 38.87 },
-        regionId: 'usa',
-        label: 'Washington, DC',
-      },
-      {
-        keywords: ['susquehanna'],
-        coords: { lon: -76.08, lat: 39.72 },
-        regionId: 'usa',
-        label: 'Washington, DC',
-      },
-      {
-        keywords: ['sr-400', 'express lanes'],
-        coords: { lon: -84.36, lat: 33.97 },
-        regionId: 'usa',
-        label: 'Atlanta, GA',
-      },
-      {
-        keywords: ['calcasieu'],
-        coords: { lon: -93.217, lat: 30.226 },
-        regionId: 'usa',
-        label: 'Lake Charles, LA',
-      },
-      {
-        keywords: ['grand parkway'],
-        coords: { lon: -95.369, lat: 29.76 },
-        regionId: 'usa',
-        label: 'Houston, TX',
-      },
-      {
-        keywords: ['i-69'],
-        coords: { lon: -86.526, lat: 39.165 },
-        regionId: 'usa',
-        label: 'Bloomington, IN',
-      },
-      {
-        keywords: ['ayacucho', 'medell'],
-        coords: { lon: -75.563, lat: 6.244 },
-        regionId: 'south-america',
-        label: 'Medellín',
-      },
-      {
-        keywords: ['zizurkil', 'andoain'],
-        coords: { lon: -2.02, lat: 43.23 },
-        regionId: 'europe',
-        label: 'Zizurkil · Andoain',
-      },
-      {
-        keywords: ['venta de baños'],
-        coords: { lon: -4.5, lat: 41.99 },
-        regionId: 'europe',
-        label: 'Venta de Baños',
-      },
-      {
-        keywords: ['andoain to urnieta', 'urnieta'],
-        coords: { lon: -2.01, lat: 43.25 },
-        regionId: 'europe',
-        label: 'Andoain · Urnieta',
-      },
-      {
-        keywords: ['cabezón de pisuerga', 'valvení'],
-        coords: { lon: -4.63, lat: 41.78 },
-        regionId: 'europe',
-        label: 'Cabezón de Pisuerga',
-      },
-      {
-        keywords: ['legutiano', 'escoriatza'],
-        coords: { lon: -2.52, lat: 43.04 },
-        regionId: 'europe',
-        label: 'Legutiano · Escoriatza',
-      },
-      {
-        keywords: ['gernika'],
-        coords: { lon: -2.68, lat: 43.31 },
-        regionId: 'europe',
-        label: 'Gernika',
-      },
-      {
-        keywords: ['vilademuls', 'cornellà'],
-        coords: { lon: 2.82, lat: 42.12 },
-        regionId: 'europe',
-        label: 'Vilademuls',
-      },
-      {
-        keywords: ['bi-625'],
-        coords: { lon: -2.87, lat: 43.23 },
-        regionId: 'europe',
-        label: 'BI-625 Corridor',
-      },
-      {
-        keywords: ['r-3', 'm-50', 'madrid'],
-        coords: { lon: -3.52, lat: 40.35 },
-        regionId: 'europe',
-        label: 'Madrid',
-      },
-      {
-        keywords: ['ap1', 'bergara'],
-        coords: { lon: -2.41, lat: 43.18 },
-        regionId: 'europe',
-        label: 'Eibar · Bergara',
-      },
-      {
-        keywords: ['urumea', 'astigarraga'],
-        coords: { lon: -1.95, lat: 43.29 },
-        regionId: 'europe',
-        label: 'Martutene · Astigarraga',
-      },
+  {
+    keywords: ['long bridge north'],
+    coords: { lon: -77.04, lat: 38.87 },
+    regionId: 'usa',
+    label: 'Washington, DC',
+  },
+  {
+    keywords: ['susquehanna'],
+    coords: { lon: -76.08, lat: 39.72 },
+    regionId: 'usa',
+    label: 'Washington, DC',
+  },
+  {
+    keywords: ['sr-400', 'express lanes'],
+    coords: { lon: -84.36, lat: 33.97 },
+    regionId: 'usa',
+    label: 'Atlanta, GA',
+  },
+  {
+    keywords: ['calcasieu'],
+    coords: { lon: -93.217, lat: 30.226 },
+    regionId: 'usa',
+    label: 'Lake Charles, LA',
+  },
+  {
+    keywords: ['grand parkway'],
+    coords: { lon: -95.369, lat: 29.76 },
+    regionId: 'usa',
+    label: 'Houston, TX',
+  },
+  {
+    keywords: ['i-69'],
+    coords: { lon: -86.526, lat: 39.165 },
+    regionId: 'usa',
+    label: 'Bloomington, IN',
+  },
+  {
+    keywords: ['ayacucho', 'medell'],
+    coords: { lon: -75.563, lat: 6.244 },
+    regionId: 'south-america',
+    label: 'Medellín',
+  },
+  {
+    keywords: ['zizurkil', 'andoain'],
+    coords: { lon: -2.02, lat: 43.23 },
+    regionId: 'europe',
+    label: 'Zizurkil · Andoain',
+  },
+  {
+    keywords: ['venta de baños'],
+    coords: { lon: -4.5, lat: 41.99 },
+    regionId: 'europe',
+    label: 'Venta de Baños',
+  },
+  {
+    keywords: ['andoain to urnieta', 'urnieta'],
+    coords: { lon: -2.01, lat: 43.25 },
+    regionId: 'europe',
+    label: 'Andoain · Urnieta',
+  },
+  {
+    keywords: ['cabezón de pisuerga', 'valvení'],
+    coords: { lon: -4.63, lat: 41.78 },
+    regionId: 'europe',
+    label: 'Cabezón de Pisuerga',
+  },
+  {
+    keywords: ['legutiano', 'escoriatza'],
+    coords: { lon: -2.52, lat: 43.04 },
+    regionId: 'europe',
+    label: 'Legutiano · Escoriatza',
+  },
+  {
+    keywords: ['gernika'],
+    coords: { lon: -2.68, lat: 43.31 },
+    regionId: 'europe',
+    label: 'Gernika',
+  },
+  {
+    keywords: ['vilademuls', 'cornellà'],
+    coords: { lon: 2.82, lat: 42.12 },
+    regionId: 'europe',
+    label: 'Vilademuls',
+  },
+  {
+    keywords: ['bi-625'],
+    coords: { lon: -2.87, lat: 43.23 },
+    regionId: 'europe',
+    label: 'BI-625 Corridor',
+  },
+  {
+    keywords: ['r-3', 'm-50', 'madrid'],
+    coords: { lon: -3.52, lat: 40.35 },
+    regionId: 'europe',
+    label: 'Madrid',
+  },
+  {
+    keywords: ['ap1', 'bergara'],
+    coords: { lon: -2.41, lat: 43.18 },
+    regionId: 'europe',
+    label: 'Eibar · Bergara',
+  },
+  {
+    keywords: ['urumea', 'astigarraga'],
+    coords: { lon: -1.95, lat: 43.29 },
+    regionId: 'europe',
+    label: 'Martutene · Astigarraga',
+  },
 ];
 
 const REGION_IDS: RegionId[] = ['global', 'usa', 'europe', 'south-america'];
@@ -201,36 +202,41 @@ const matchProjectToLocation = (project: Project): ProjectLocationDefinition | u
   );
 };
 
-const MapUpdater: React.FC<{ center: LatLngExpression, zoom: number }> = ({ center, zoom }) => {
-    const map = useMap();
-    useEffect(() => {
-      map.setView(center, zoom);
-    }, [center, zoom, map]);
-    return null;
-  }
+const MapUpdater: React.FC<{ center: LatLngExpression; zoom: number }> = ({ center, zoom }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    map.setView(center, zoom);
+  }, [center, zoom, map]);
+
+  return null;
+};
 
 const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
   const [activeRegion, setActiveRegion] = useState<RegionId>('global');
 
   const projectMarkers = useMemo(() => {
-    return projects.map(project => {
-      const match = matchProjectToLocation(project);
-      if (!match) {
-        return null;
-      }
-      return {
-        ...project,
-        coords: [match.coords.lat, match.coords.lon] as LatLngExpression,
-        regionId: match.regionId,
-      };
-    }).filter(p => p !== null);
+    return projects
+      .map((project) => {
+        const match = matchProjectToLocation(project);
+        if (!match) {
+          return null;
+        }
+
+        return {
+          ...project,
+          coords: [match.coords.lat, match.coords.lon] as LatLngExpression,
+          regionId: match.regionId,
+        };
+      })
+      .filter((project): project is Project & { coords: LatLngExpression; regionId: RegionId } => project !== null);
   }, [projects]);
 
   const activeRegionDef = REGION_DEFINITIONS[activeRegion];
 
   const markersForRegion = activeRegion === 'global'
     ? projectMarkers
-    : projectMarkers.filter(p => p && p.regionId === activeRegion);
+    : projectMarkers.filter((project) => project.regionId === activeRegion);
 
   return (
     <div className="mt-20">
@@ -266,7 +272,6 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {markersForRegion.map((project) => (
-            project &&
             <Marker key={`${project.name}-${project.regionId}`} position={project.coords}>
               <Popup>
                 <b>{project.name}</b><br />
