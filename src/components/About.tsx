@@ -30,6 +30,8 @@ const About: React.FC<AboutProps> = ({ data, achievements }) => {
                     src={profileImage} 
                     alt={data.full_name}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
