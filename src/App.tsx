@@ -1,15 +1,20 @@
-import { useState, useEffect } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
-import Experience from './components/Experience';
-import CoreCompetencies from './components/CoreCompetencies';
-import KeyProjects from './components/KeyProjects';
-import Education from './components/Education';
-import Contact from './components/Contact';
 import { ResumeData, ResumeDataSchema } from './types';
 import { AlertCircle } from 'lucide-react';
+
+const Experience = lazy(() => import('./components/Experience'));
+const CoreCompetencies = lazy(() => import('./components/CoreCompetencies'));
+const KeyProjects = lazy(() => import('./components/KeyProjects'));
+const Education = lazy(() => import('./components/Education'));
+const Contact = lazy(() => import('./components/Contact'));
+
+const SectionLoader = () => (
+  <div className="py-12 text-center text-muted-foreground">Loading section...</div>
+);
 
 function App() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
@@ -17,18 +22,22 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchData = async () => {
       try {
-        const response = await fetch('./data.json');
+        const response = await fetch('./data.json', { signal: controller.signal });
         if (!response.ok) {
           throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
         }
         const jsonData = await response.json();
-        
-        // Validate data with Zod
+
         const validatedData = ResumeDataSchema.parse(jsonData);
         setResumeData(validatedData);
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return;
+        }
         console.error('Error loading resume data:', err);
         setError(err instanceof Error ? err.message : 'An unknown error occurred while loading data.');
       } finally {
@@ -37,6 +46,10 @@ function App() {
     };
 
     fetchData();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   if (loading) {
@@ -61,7 +74,7 @@ function App() {
           <p className="text-muted-foreground mb-6">
             {error || 'Unable to load portfolio data. Please try again later.'}
           </p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
           >
@@ -78,19 +91,34 @@ function App() {
       <main>
         <Hero data={resumeData.personal_info} />
         <About data={resumeData.personal_info} achievements={resumeData.key_achievements} />
-        <Experience experiences={resumeData.work_experience} />
-        <CoreCompetencies
-          competencies={resumeData.core_competencies}
-          technicalExpertise={resumeData.technical_expertise}
-          leadershipSkills={resumeData.leadership_skills}
-        />
-        <KeyProjects projects={resumeData.key_projects} />
-        <Education 
-          education={resumeData.education} 
-          programs={resumeData.postgraduate_programs}
-          certifications={resumeData.professional_certifications}
-        />
-        <Contact data={resumeData.personal_info} />
+
+        <Suspense fallback={<SectionLoader />}>
+          <Experience experiences={resumeData.work_experience} />
+        </Suspense>
+
+        <Suspense fallback={<SectionLoader />}>
+          <CoreCompetencies
+            competencies={resumeData.core_competencies}
+            technicalExpertise={resumeData.technical_expertise}
+            leadershipSkills={resumeData.leadership_skills}
+          />
+        </Suspense>
+
+        <Suspense fallback={<SectionLoader />}>
+          <KeyProjects projects={resumeData.key_projects} />
+        </Suspense>
+
+        <Suspense fallback={<SectionLoader />}>
+          <Education
+            education={resumeData.education}
+            programs={resumeData.postgraduate_programs}
+            certifications={resumeData.professional_certifications}
+          />
+        </Suspense>
+
+        <Suspense fallback={<SectionLoader />}>
+          <Contact data={resumeData.personal_info} />
+        </Suspense>
       </main>
     </div>
   );
