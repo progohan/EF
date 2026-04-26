@@ -8,8 +8,6 @@ export interface ResumeData {
     location: string;
     cv_url?: string;
     contact: {
-      phone: string;
-      email: string;
       linkedin: string;
     };
     summary: string;
@@ -71,8 +69,6 @@ export const ResumeDataSchema: z.ZodType<ResumeData> = z.object({
     location: z.string(),
     cv_url: z.string().optional(),
     contact: z.object({
-      phone: z.string(),
-      email: z.string(),
       linkedin: z.string(),
     }),
     summary: z.string(),
