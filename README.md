@@ -39,7 +39,7 @@ Visit the live website: [https://progohan.github.io/EF](https://progohan.github.
 1. Clone the repository:
 ```bash
 git clone https://github.com/progohan/EF.git
-cd EfernandezOrtiz
+cd EF
 ```
 
 2. Install dependencies:
@@ -134,4 +134,4 @@ This project is created for Eduardo's professional portfolio. All rights reserve
 
 ---
 
-Built with ❤️ using React, TypeScript, and Tailwind CSS
+Built with React, TypeScript, and Tailwind CSS

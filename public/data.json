@@ -12,7 +12,6 @@
     "location": "Washington, DC",
     "cv_url": "Eduardo_Fernandez_CV.pdf",
     "contact": {
-      "phone": "+1 703-489-9864",
       "email": "efernandezortiz@ciccp.es",
       "linkedin": "https://www.linkedin.com/in/eduardo-fernandez-ortiz/"
     },
@@ -147,7 +146,7 @@
   "education": [
     {
       "degree": "Bachelor of Law",
-      "institution": "International University of La Rioja, Spain",      
+      "institution": "International University of La Rioja, Spain",
       "year": "2025"
     },
     {
@@ -283,7 +282,7 @@
       "scope": "21-miles of interstate I-69",
       "role": "Senior Project Manager",
       "company": "Isolux Corsan USA",
-      "client": "INDOT",      
+      "client": "INDOT",
       "achievement": "Led the technical and commercial management ensuring successful coordination of design-build activities, project controls, and procurement",
       "location": "Bloomington IN, USA",
       "timeframe": "Aug 2014 - Oct 2017"
@@ -340,7 +339,7 @@
       "company": "Team Engineering for Ferrovial",
       "scope": "2-km tunnel and two prefabricated bridges",
       "location": "Castile and León, Spain",
-      "achievement": "Successfully completed tunnel construction, installed prefabricated bridges, and developed high-speed rail corridors"      
+      "achievement": "Successfully completed tunnel construction, installed prefabricated bridges, and developed high-speed rail corridors"
     },
     {
       "name": "High-Speed Rail Legutiano to Escoriatza",

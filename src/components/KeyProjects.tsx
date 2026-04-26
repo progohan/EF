@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { Suspense, useMemo, useState } from 'react';
 import { PiTrain } from 'react-icons/pi';
 import { GiSuspensionBridge } from 'react-icons/gi';
 import { FaRoad, FaHardHat } from 'react-icons/fa';
 import { TbBuildingTunnel } from 'react-icons/tb';
 import { MdLocationOn, MdClose } from 'react-icons/md';
 import { Button } from './ui/button';
-import ProjectMaps from './ProjectMaps';
 import { ResumeData } from '../types';
+
+const ProjectMaps = React.lazy(() => import('./ProjectMaps'));
 
 type Project = ResumeData['key_projects'][0];
 
@@ -65,19 +66,19 @@ const getProjectInfo = (project: Project): ProjectInfo => {
 const FILTER_KEYS: FilterKey[] = ['all', 'highways', 'railways', 'miscellaneous'];
 
 const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<(Project & ProjectInfo) | null>(null);
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
 
   const projectsWithInfo = useMemo(() => {
-    return projects.map(p => ({ ...p, ...getProjectInfo(p) }));
+    return projects.map((project) => ({ ...project, ...getProjectInfo(project) }));
   }, [projects]);
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === 'all') return projectsWithInfo;
-    return projectsWithInfo.filter(p => p.categoryKey === activeFilter);
+    return projectsWithInfo.filter((project) => project.categoryKey === activeFilter);
   }, [projectsWithInfo, activeFilter]);
 
-  const handleProjectKeyDown = (e: React.KeyboardEvent, project: Project) => {
+  const handleProjectKeyDown = (e: React.KeyboardEvent, project: Project & ProjectInfo) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       setSelectedProject(project);
@@ -179,7 +180,7 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
               {/* Modal Header */}
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-start">
-                  <div className="text-4xl text-primary mr-4">{(selectedProject as Project & ProjectInfo).icon}</div>
+                  <div className="text-4xl text-primary mr-4">{selectedProject.icon}</div>
                   <div>
                     <h3 className="text-2xl font-bold text-foreground mb-2">{selectedProject.name}</h3>
                     <div className="flex items-center text-muted-foreground">
@@ -187,14 +188,16 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                         {selectedProject.value}
                       </span>
                       <span className="px-2 py-1 bg-primary/10 border border-primary/20 rounded text-primary text-sm">
-                        {(selectedProject as Project & ProjectInfo).categoryLabel}
+                        {selectedProject.categoryLabel}
                       </span>
                     </div>
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setSelectedProject(null)}
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Close project details"
                 >
                   <MdClose className="w-6 h-6" />
                 </button>
@@ -256,7 +259,9 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
         </div>
       )}
 
-      <ProjectMaps projects={projects} />
+      <Suspense fallback={<div className="mt-20 text-center text-muted-foreground">Loading project map...</div>}>
+        <ProjectMaps projects={projects} />
+      </Suspense>
     </section>
   );
 };
