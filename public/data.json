@@ -230,7 +230,10 @@
       "client": "VPRA",
       "achievement": "Leading the delivery phases of a critical rail corridor expansion.",
       "scope": "Construction of a series of upgraded and new bridges to increase rail capacity and reliability in the corridor.",
-      "timeframe": "2025 - Present"
+      "timeframe": "2025 - Present",
+      "contract_type": "PDB",
+      "sector": "rail",
+      "region": "usa"
     },
     {
       "name": "Susquehanna River Bridge CMAR Project",
@@ -241,7 +244,10 @@
       "client": "Amtrak",
       "achievement": "Managing all commercial activities including contracts, procurement, project controls, communications, and financial management",
       "scope": "Replacement of the existing Susquehanna River Bridge with two new parallel, 1mile fixed-span structures featuring a total of four tracks",
-      "timeframe": "Jun 2024 - Present"
+      "timeframe": "Jun 2024 - Present",
+      "contract_type": "CMAR",
+      "sector": "rail",
+      "region": "usa"
     },
     {
       "name": "SR-400 Express Lanes P3 Project",
@@ -252,7 +258,10 @@
       "client": "GDOT",
       "achievement": "Excelled in capture of major projects, enhancing proposal quality and securing new business, contributed to enhancing proposals, and facilitated stakeholder meetings to ensure transparency and maintain strong client relationships",
       "scope": "16-mile express managed lanes",
-      "timeframe": "Jun 2023 - Jun 2024"
+      "timeframe": "Jun 2023 - Jun 2024",
+      "contract_type": "P3",
+      "sector": "highway",
+      "region": "usa"
     },
     {
       "name": "I-10 Calcasieu River Bridge P3 Project",
@@ -263,7 +272,10 @@
       "client": "LADOTD",
       "achievement": "Excelled in capture of major projects, enhancing proposal quality and securing new business, contributed to enhancing proposals, and facilitated stakeholder meetings to ensure transparency and maintain strong client relationships",
       "scope": "New 8-lane bridge and approaches along a 5.5-mile I-10 corridor",
-      "timeframe": "Jun 2023 - Jun 2024"
+      "timeframe": "Jun 2023 - Jun 2024",
+      "contract_type": "P3",
+      "sector": "highway",
+      "region": "usa"
     },
     {
       "name": "TXDOT Grand Parkway Segments H, I-1, and I-2 DB Project",
@@ -274,7 +286,10 @@
       "client": "TXDOT",
       "achievement": "Successfully delivered all RFC design packages for the TxDOT $950M Design-Build Grand Parkway Segments H, I-1, and I-2 Project, managed over 300 design change modifications, enhancing project safety and cost-effectiveness, provided leadership and strategic direction as Construction Technical Office Manager**, supporting the US management team, and collaborated closely with joint venture partners, ensuring adherence to the Design-Build contract with TxDOT",
       "scope": "58-mile toll road infrastructure",
-      "timeframe": "Oct 2017 - Feb 2022"
+      "timeframe": "Oct 2017 - Feb 2022",
+      "contract_type": "DB",
+      "sector": "highway",
+      "region": "usa"
     },
     {
       "name": "INDOT I-69 Section 5 P3 Project",
@@ -285,7 +300,10 @@
       "client": "INDOT",
       "achievement": "Led the technical and commercial management ensuring successful coordination of design-build activities, project controls, and procurement",
       "location": "Bloomington IN, USA",
-      "timeframe": "Aug 2014 - Oct 2017"
+      "timeframe": "Aug 2014 - Oct 2017",
+      "contract_type": "P3",
+      "sector": "highway",
+      "region": "usa"
     },
     {
       "name": "Tramway Corridor Ayacucho Avenue",
@@ -296,7 +314,10 @@
       "client": "Metro de Medellín",
       "scope": "2-km tram infrastructure with cut & cover structures",
       "location": "Medellín, Colombia",
-      "achievement": "Implementation of cut & cover construction methodology"
+      "achievement": "Implementation of cut & cover construction methodology",
+      "contract_type": "DBB",
+      "sector": "rail",
+      "region": "south-america"
     },
     {
       "name": "High Speed Rail Zizurkil to Andoain",
@@ -307,7 +328,10 @@
       "scope": "5-km tunnel (NATM) and 200-meter concrete bridge",
       "location": "Basque Country, Spain",
       "client": "ADIF",
-      "achievement": "Design of 5km tunnel using NATM methodology"
+      "achievement": "Design of 5km tunnel using NATM methodology",
+      "contract_type": "DBB",
+      "sector": "rail",
+      "region": "europe"
     },
     {
       "name": "High Speed Rail Nudo de Venta de Baños",
@@ -318,7 +342,10 @@
       "scope": "Two pre-stressed concrete bridges (1,330m and 1,128m)",
       "client": "ADIF",
       "location": "Castilla y León, Spain",
-      "achievement": "Delivered major pre-stressed concrete bridge structures, contributed to high-speed rail network expansion, and implemented advanced concrete construction techniques"
+      "achievement": "Delivered major pre-stressed concrete bridge structures, contributed to high-speed rail network expansion, and implemented advanced concrete construction techniques",
+      "contract_type": "DBB",
+      "sector": "rail",
+      "region": "europe"
     },
     {
       "name": "High Speed Rail Andoain to Urnieta",
@@ -329,7 +356,10 @@
       "scope": "340-meter pre-stressed concrete bridge, 200-meter prefabricated beams bridge, 2-km tunnel (NATM)",
       "location": "Basque Country, Spain",
       "client": "ADIF",
-      "achievement": "Constructed complex bridge structures, implemented NATM tunneling technology, and integrated multiple construction methodologies"
+      "achievement": "Constructed complex bridge structures, implemented NATM tunneling technology, and integrated multiple construction methodologies",
+      "contract_type": "DBB",
+      "sector": "rail",
+      "region": "europe"
     },
     {
       "name": "High Speed Rail Cabezón de Pisuerga to San Martín de Valvení",
@@ -339,7 +369,10 @@
       "company": "Team Engineering for Ferrovial",
       "scope": "2-km tunnel and two prefabricated bridges",
       "location": "Castile and León, Spain",
-      "achievement": "Successfully completed tunnel construction, installed prefabricated bridges, and developed high-speed rail corridors"
+      "achievement": "Successfully completed tunnel construction, installed prefabricated bridges, and developed high-speed rail corridors",
+      "contract_type": "DBB",
+      "sector": "rail",
+      "region": "europe"
     },
     {
       "name": "High-Speed Rail Legutiano to Escoriatza",
@@ -347,7 +380,10 @@
       "role": "Senior Project Manager",
       "company": "Fonorte",
       "scope": "Two parallel 2-km tunnel (NATM)",
-      "timeframe": "Nov 2008 - Jun 2010"
+      "timeframe": "Nov 2008 - Jun 2010",
+      "contract_type": "DBB",
+      "sector": "rail",
+      "region": "europe"
     },
     {
       "name": "Gernika Water Pipeline Construction",
@@ -357,7 +393,10 @@
       "company": "Construction contractor",
       "scope": "7-km water pipeline including 700-meter pipe jacking",
       "location": "Gernika, Basque Country, Spain",
-      "achievement": "Successfully completed pipe jacking operations, enhanced water infrastructure systems, and applied trenchless construction methodologies"
+      "achievement": "Successfully completed pipe jacking operations, enhanced water infrastructure systems, and applied trenchless construction methodologies",
+      "contract_type": "DBB",
+      "sector": "other",
+      "region": "europe"
     },
     {
       "name": "High-Speed Rail Cornellà del Terri to Vilademuls",
@@ -365,7 +404,10 @@
       "role": "Project Manager",
       "company": "Sacyr",
       "scope": "Tunnels and pre-stressed concrete bridges",
-      "timeframe": "Sep 2005 - Nov 2008"
+      "timeframe": "Sep 2005 - Nov 2008",
+      "contract_type": "DBB",
+      "sector": "rail",
+      "region": "europe"
     },
     {
       "name": "Urban Road BI-625 Section IV Project",
@@ -375,7 +417,10 @@
       "company": "Construction contractor",
       "scope": "3-km high capacity to urban road conversion with demolitions, contaminated material excavation, drainage systems",
       "location": "Basque Country, Spain",
-      "achievement": "Transformed urban road infrastructure, managed environmental remediation and contaminated materials, and relocated and installed utility infrastructure"
+      "achievement": "Transformed urban road infrastructure, managed environmental remediation and contaminated materials, and relocated and installed utility infrastructure",
+      "contract_type": "DBB",
+      "sector": "highway",
+      "region": "europe"
     },
     {
       "name": "Toll Road Intersection R-3/M-50",
@@ -385,7 +430,10 @@
       "company": "Construction contractor",
       "scope": "Intersection of two toll roads with seven prefabricated bridges",
       "location": "Madrid, Spain",
-      "achievement": "Constructed complex highway intersections, installed multiple prefabricated bridges, and managed traffic during construction"
+      "achievement": "Constructed complex highway intersections, installed multiple prefabricated bridges, and managed traffic during construction",
+      "contract_type": "DBB",
+      "sector": "highway",
+      "region": "europe"
     },
     {
       "name": "Toll Road AP1 Eibar to Bergara",
@@ -394,7 +442,10 @@
       "role": "Construction Supervision Manager",
       "location": "Basque Country, Spain",
       "company": "Prointec",
-      "timeframe": "Jan 2003 - Sep 2005"
+      "timeframe": "Jan 2003 - Sep 2005",
+      "contract_type": "DBB",
+      "sector": "highway",
+      "region": "europe"
     },
     {
       "name": "Urumea Highway Martutene to Astigarraga",
@@ -402,7 +453,52 @@
       "scope": "6-km highway",
       "role": "Construction Supervision Manager",
       "company": "Prointec",
-      "timeframe": "Jan 2003 - Sep 2005"
+      "timeframe": "Jan 2003 - Sep 2005",
+      "contract_type": "DBB",
+      "sector": "highway",
+      "region": "europe"
+    },
+    {
+      "name": "East Harbour Transit Hub Alliance",
+      "value": "$0.5B CAD",
+      "role": "Project Manager Early Works",
+      "company": "Rail Connect Partners, Bird Construction and AtkinsRéalis JV",
+      "location": "Toronto, Ontario, Canada",
+      "client": "Metrolinx",
+      "achievement": "Delivering one of Canada’s first major transit projects under an alliance contracting model.",
+      "scope": "New interchange station connecting GO Transit Lakeshore East and Stouffville lines with the future Ontario Line, including six tracks, three island platforms, concourses, bridge and corridor works, and future Broadview Avenue extension interface.",
+      "timeframe": "2022 - 2023",
+      "contract_type": "Alliance",
+      "sector": "rail",
+      "region": "canada"
+    },
+    {
+      "name": "Scarborough Subway Extension SRS PDB",
+      "value": "$5.7B CAD",
+      "role": "SME in Bid phase",
+      "company": "Kiewit and AtkinsRéalis JV",
+      "location": "Toronto, Ontario, Canada",
+      "client": "Metrolinx",
+      "achievement": "Advancing the stations, rail, and systems package for a major extension of TTC Line 2 into Scarborough.",
+      "scope": "Design and construction of stations, rail, and systems for the 7.8 km Scarborough Subway Extension, including three new stations, rail systems, operating systems, emergency exit buildings, traction power, and Kennedy Station modifications.",
+      "timeframe": "2022 - 2022",
+      "contract_type": "PDB",
+      "sector": "rail",
+      "region": "canada"
+    },
+    {
+      "name": "Ontario Line Elevated Guideway and Stations PDB",
+      "value": "$1.5B CAD",
+      "role": "Bid Director RFQ",
+      "company": "Bird Construction and AtkinsRéalis JV",
+      "location": "Toronto, Ontario, Canada",
+      "client": "Metrolinx",
+      "achievement": "Delivering a key elevated section of the Ontario Line under a progressive design-build model.",
+      "scope": "Design and construction of approximately 3 km of elevated guideway, five elevated stations, one emergency exit building, and interfaces with the maintenance and storage facility, Eglinton Crosstown LRT, and existing Metrolinx rail corridor.",
+      "timeframe": "2023 - 2023",
+      "contract_type": "PDB",
+      "sector": "rail",
+      "region": "canada"
     }
   ],
   "key_achievements": [
