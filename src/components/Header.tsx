@@ -22,6 +22,9 @@ const Header: React.FC = () => {
               <a href="#hero" onClick={handleLinkClick} className="text-foreground hover:text-primary transition-colors">
                 Home
               </a>
+              <a href="#snapshot" onClick={handleLinkClick} className="text-foreground hover:text-primary transition-colors">
+                Snapshot
+              </a>
               <a href="#about" onClick={handleLinkClick} className="text-foreground hover:text-primary transition-colors">
                 About
               </a>
@@ -65,6 +68,9 @@ const Header: React.FC = () => {
           <div id="mobile-menu" className="md:hidden mt-4 space-y-2 bg-background p-4 rounded-lg shadow-lg">
             <a href="#hero" onClick={handleLinkClick} className="block w-full text-left text-foreground hover:text-primary py-2">
               Home
+            </a>
+            <a href="#snapshot" onClick={handleLinkClick} className="block w-full text-left text-foreground hover:text-primary py-2">
+              Snapshot
             </a>
             <a href="#about" onClick={handleLinkClick} className="block w-full text-left text-foreground hover:text-primary py-2">
               About

@@ -6,6 +6,7 @@ import About from './components/About';
 import { ResumeData, ResumeDataSchema } from './types';
 import { AlertCircle } from 'lucide-react';
 
+const PortfolioSnapshot = lazy(() => import('./components/PortfolioSnapshot'));
 const Experience = lazy(() => import('./components/Experience'));
 const CoreCompetencies = lazy(() => import('./components/CoreCompetencies'));
 const KeyProjects = lazy(() => import('./components/KeyProjects'));
@@ -90,6 +91,11 @@ function App() {
       <Header />
       <main>
         <Hero data={resumeData.personal_info} />
+
+        <Suspense fallback={<SectionLoader />}>
+          <PortfolioSnapshot data={resumeData} />
+        </Suspense>
+
         <About data={resumeData.personal_info} achievements={resumeData.key_achievements} />
 
         <Suspense fallback={<SectionLoader />}>

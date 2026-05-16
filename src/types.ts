@@ -51,6 +51,10 @@ export interface ResumeData {
     contribution?: string;
     achievement?: string;
     scope?: string;
+    timeframe?: string;
+    contract_type?: ContractType;
+    sector?: ProjectSector;
+    region?: ProjectRegion;
   }>;
   key_achievements: string[];
   technical_expertise: {
@@ -61,6 +65,10 @@ export interface ResumeData {
   };
   leadership_skills: string[];
 }
+
+export type ContractType = 'P3' | 'PDB' | 'DB' | 'DBB' | 'CMAR' | 'Alliance' | 'Other';
+export type ProjectSector = 'rail' | 'highway' | 'other';
+export type ProjectRegion = 'usa' | 'canada' | 'europe' | 'south-america' | 'other';
 
 export const ResumeDataSchema: z.ZodType<ResumeData> = z.object({
   personal_info: z.object({
@@ -113,6 +121,10 @@ export const ResumeDataSchema: z.ZodType<ResumeData> = z.object({
     contribution: z.string().optional(),
     achievement: z.string().optional(),
     scope: z.string().optional(),
+    timeframe: z.string().optional(),
+    contract_type: z.enum(['P3', 'PDB', 'DB', 'DBB', 'CMAR', 'Alliance', 'Other']).optional(),
+    sector: z.enum(['rail', 'highway', 'other']).optional(),
+    region: z.enum(['usa', 'canada', 'europe', 'south-america', 'other']).optional(),
   })),
   key_achievements: z.array(z.string()),
   technical_expertise: z.object({

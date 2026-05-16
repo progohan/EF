@@ -5,7 +5,8 @@ import { FaRoad, FaHardHat } from 'react-icons/fa';
 import { TbBuildingTunnel } from 'react-icons/tb';
 import { MdLocationOn, MdClose } from 'react-icons/md';
 import { Button } from './ui/button';
-import { ResumeData } from '../types';
+import { ContractType, ResumeData } from '../types';
+import { enrichProjects, ProjectWithMetrics, RegionKey, SectorKey } from '../lib/portfolioMetrics';
 
 const ProjectMaps = React.lazy(() => import('./ProjectMaps'));
 
@@ -15,74 +16,138 @@ interface KeyProjectsProps {
   projects: Project[];
 }
 
-type ProjectCategoryKey = 'highways' | 'railways' | 'miscellaneous';
-type FilterKey = 'all' | ProjectCategoryKey;
-
 interface ProjectInfo {
-  categoryKey: ProjectCategoryKey;
   categoryLabel: string;
   icon: JSX.Element;
 }
 
-const filterConfig: Record<FilterKey, { label: string }> = {
-  all: { label: 'All Projects' },
-  highways: { label: 'Highways' },
-  railways: { label: 'Railways' },
-  miscellaneous: { label: 'Miscellaneous' },
+type SectorFilterKey = 'all' | SectorKey;
+type ContractFilterKey = 'all' | ContractType;
+type RegionFilterKey = 'all' | RegionKey;
+
+const sectorFilterConfig: Record<SectorFilterKey, { label: string }> = {
+  all: { label: 'All Sectors' },
+  rail: { label: 'Rail & Transit' },
+  highway: { label: 'Highways & Bridges' },
+  other: { label: 'Other Infrastructure' },
 };
 
-const getProjectInfo = (project: Project): ProjectInfo => {
+const contractFilterConfig: Record<ContractFilterKey, { label: string }> = {
+  all: { label: 'All Contracts' },
+  P3: { label: 'P3' },
+  PDB: { label: 'PDB' },
+  DB: { label: 'DB' },
+  DBB: { label: 'DBB' },
+  CMAR: { label: 'CMAR' },
+  Alliance: { label: 'Alliance' },
+  Other: { label: 'Other' },
+};
+
+const regionFilterConfig: Record<RegionFilterKey, { label: string }> = {
+  all: { label: 'All Regions' },
+  usa: { label: 'United States' },
+  canada: { label: 'Canada' },
+  europe: { label: 'Europe' },
+  'south-america': { label: 'South America' },
+  other: { label: 'Other' },
+};
+
+const getProjectInfo = (project: ProjectWithMetrics): ProjectInfo => {
   const text = `${project.name} ${project.scope ?? ''}`.toLowerCase();
 
-  if (text.includes('rail') || text.includes('tram') || text.includes('track')) {
-    return { categoryKey: 'railways', categoryLabel: 'High-Speed Rail', icon: <PiTrain /> };
+  if (project.sectorKey === 'rail') {
+    return { categoryLabel: 'Rail & Transit', icon: <PiTrain /> };
   }
 
   if (text.includes('bridge')) {
-    return { categoryKey: 'highways', categoryLabel: 'Bridge Construction', icon: <GiSuspensionBridge /> };
+    return { categoryLabel: 'Bridge Construction', icon: <GiSuspensionBridge /> };
   }
 
-  if (
-    text.includes('highway') ||
-    text.includes('interstate') ||
-    text.includes('i-') ||
-    text.includes('sr-') ||
-    text.includes('express') ||
-    text.includes('parkway') ||
-    text.includes('toll') ||
-    text.includes('road') ||
-    text.includes('lane')
-  ) {
-    return { categoryKey: 'highways', categoryLabel: 'Highway Construction', icon: <FaRoad /> };
+  if (project.sectorKey === 'highway') {
+    return { categoryLabel: 'Highway Construction', icon: <FaRoad /> };
   }
 
   if (text.includes('tunnel')) {
-    return { categoryKey: 'miscellaneous', categoryLabel: 'Tunneling', icon: <TbBuildingTunnel /> };
+    return { categoryLabel: 'Tunneling', icon: <TbBuildingTunnel /> };
   }
 
-  return { categoryKey: 'miscellaneous', categoryLabel: 'Infrastructure', icon: <FaHardHat /> };
+  return { categoryLabel: 'Infrastructure', icon: <FaHardHat /> };
 };
 
-const FILTER_KEYS: FilterKey[] = ['all', 'highways', 'railways', 'miscellaneous'];
+const SECTOR_ORDER: SectorKey[] = ['rail', 'highway', 'other'];
+const CONTRACT_ORDER: ContractType[] = ['P3', 'PDB', 'DB', 'DBB', 'CMAR', 'Alliance', 'Other'];
+const REGION_ORDER: RegionKey[] = ['usa', 'canada', 'europe', 'south-america', 'other'];
 
 const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
-  const [selectedProject, setSelectedProject] = useState<(Project & ProjectInfo) | null>(null);
-  const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
+  const [selectedProject, setSelectedProject] = useState<(ProjectWithMetrics & ProjectInfo) | null>(null);
+  const [activeSector, setActiveSector] = useState<SectorFilterKey>('all');
+  const [activeContract, setActiveContract] = useState<ContractFilterKey>('all');
+  const [activeRegion, setActiveRegion] = useState<RegionFilterKey>('all');
 
   const projectsWithInfo = useMemo(() => {
-    return projects.map((project) => ({ ...project, ...getProjectInfo(project) }));
+    return enrichProjects(projects).map((project) => ({ ...project, ...getProjectInfo(project) }));
   }, [projects]);
 
-  const filteredProjects = useMemo(() => {
-    if (activeFilter === 'all') return projectsWithInfo;
-    return projectsWithInfo.filter((project) => project.categoryKey === activeFilter);
-  }, [projectsWithInfo, activeFilter]);
+  const filterCounts = useMemo(() => {
+    return {
+      sectors: projectsWithInfo.reduce<Record<string, number>>((counts, project) => {
+        counts[project.sectorKey] = (counts[project.sectorKey] ?? 0) + 1;
+        return counts;
+      }, {}),
+      contracts: projectsWithInfo.reduce<Record<string, number>>((counts, project) => {
+        counts[project.contractType] = (counts[project.contractType] ?? 0) + 1;
+        return counts;
+      }, {}),
+      regions: projectsWithInfo.reduce<Record<string, number>>((counts, project) => {
+        counts[project.regionKey] = (counts[project.regionKey] ?? 0) + 1;
+        return counts;
+      }, {}),
+    };
+  }, [projectsWithInfo]);
 
-  const handleProjectKeyDown = (e: React.KeyboardEvent, project: Project & ProjectInfo) => {
+  const sectorFilterKeys = useMemo<SectorFilterKey[]>(() => {
+    return ['all', ...SECTOR_ORDER.filter((key) => (filterCounts.sectors[key] ?? 0) > 0)];
+  }, [filterCounts.sectors]);
+
+  const contractFilterKeys = useMemo<ContractFilterKey[]>(() => {
+    return ['all', ...CONTRACT_ORDER.filter((key) => (filterCounts.contracts[key] ?? 0) > 0)];
+  }, [filterCounts.contracts]);
+
+  const regionFilterKeys = useMemo<RegionFilterKey[]>(() => {
+    return ['all', ...REGION_ORDER.filter((key) => (filterCounts.regions[key] ?? 0) > 0)];
+  }, [filterCounts.regions]);
+
+  const filteredProjects = useMemo(() => {
+    return projectsWithInfo.filter((project) => {
+      const matchesSector = activeSector === 'all' || project.sectorKey === activeSector;
+      const matchesContract = activeContract === 'all' || project.contractType === activeContract;
+      const matchesRegion = activeRegion === 'all' || project.regionKey === activeRegion;
+      return matchesSector && matchesContract && matchesRegion;
+    });
+  }, [projectsWithInfo, activeSector, activeContract, activeRegion]);
+
+  const filterSummary = useMemo(() => {
+    const contractCounts = filteredProjects.reduce<Record<string, number>>((counts, project) => {
+      counts[project.contractType] = (counts[project.contractType] ?? 0) + 1;
+      return counts;
+    }, {});
+
+    return Object.entries(contractCounts)
+      .map(([contract, count]) => `${contract}: ${count}`)
+      .join(' | ');
+  }, [filteredProjects]);
+
+  const handleProjectKeyDown = (e: React.KeyboardEvent, project: ProjectWithMetrics & ProjectInfo) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       setSelectedProject(project);
     }
+  };
+
+  const clearFilters = () => {
+    setActiveSector('all');
+    setActiveContract('all');
+    setActiveRegion('all');
   };
 
   return (
@@ -95,27 +160,71 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
               Key Projects
             </h2>
             <p className="text-muted-foreground mt-6 text-lg max-w-3xl mx-auto">
-              Multibillion-dollar infrastructure projects spanning rail, highway, and bridge construction across three continents
+              Multibillion-dollar infrastructure projects spanning rail, highway, and bridge construction across North America, Europe, and South America
             </p>
           </div>
 
-          {/* Category Filter Tabs */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {FILTER_KEYS.map((key) => (
-              <Button
-                key={key}
-                variant={activeFilter === key ? 'default' : 'outline'}
-                onClick={() => setActiveFilter(key)}
-                className="min-w-[130px]"
-              >
-                {filterConfig[key].label}
-              </Button>
-            ))}
+          {/* Portfolio Filters */}
+          <div className="space-y-4 mb-8">
+            <div className="flex flex-wrap justify-center gap-3">
+              {sectorFilterKeys.map((key) => (
+                <Button
+                  key={key}
+                  variant={activeSector === key ? 'default' : 'outline'}
+                  onClick={() => setActiveSector(key)}
+                  className="min-w-[130px]"
+                >
+                  {sectorFilterConfig[key].label}
+                  {key !== 'all' && filterCounts.sectors[key] ? ` (${filterCounts.sectors[key]})` : ''}
+                </Button>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-2">
+              {contractFilterKeys.map((key) => (
+                <Button
+                  key={key}
+                  variant={activeContract === key ? 'default' : 'outline'}
+                  onClick={() => setActiveContract(key)}
+                  size="sm"
+                >
+                  {contractFilterConfig[key].label}
+                  {key !== 'all' && filterCounts.contracts[key] ? ` (${filterCounts.contracts[key]})` : ''}
+                </Button>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-2">
+              {regionFilterKeys.map((key) => (
+                <Button
+                  key={key}
+                  variant={activeRegion === key ? 'default' : 'outline'}
+                  onClick={() => setActiveRegion(key)}
+                  size="sm"
+                >
+                  {regionFilterConfig[key].label}
+                  {key !== 'all' && filterCounts.regions[key] ? ` (${filterCounts.regions[key]})` : ''}
+                </Button>
+              ))}
+            </div>
+
+            <p className="text-center text-sm text-muted-foreground">
+              Showing {filteredProjects.length} of {projectsWithInfo.length} projects
+              {filterSummary ? ` | ${filterSummary}` : ''}
+            </p>
+            {(activeSector !== 'all' || activeContract !== 'all' || activeRegion !== 'all') && (
+              <div className="flex justify-center">
+                <Button variant="ghost" size="sm" onClick={clearFilters}>
+                  Clear filters
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {filteredProjects.map((project) => (
+          {filteredProjects.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {filteredProjects.map((project) => (
               <div
                 key={project.name}
                 className="group bg-background rounded-xl p-6 border border-border shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -140,6 +249,9 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                 <div className="mb-4">
                   <span className="inline-block px-2 py-1 bg-primary/10 border border-primary/20 rounded text-primary text-xs font-medium mb-2">
                     {project.categoryLabel}
+                  </span>
+                  <span className="inline-block ml-2 px-2 py-1 bg-muted border border-border rounded text-muted-foreground text-xs font-medium mb-2">
+                    {project.contractType}
                   </span>
                   <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                     {project.name}
@@ -167,8 +279,17 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                   </div>
                 )}
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mb-12 rounded-lg border border-border bg-background p-8 text-center">
+              <p className="text-lg font-semibold text-foreground">No projects match these filters.</p>
+              <p className="mt-2 text-sm text-muted-foreground">Try clearing one filter or returning to all projects.</p>
+              <Button className="mt-4" variant="outline" onClick={clearFilters}>
+                Clear filters
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -212,7 +333,12 @@ const KeyProjects: React.FC<KeyProjectsProps> = ({ projects }) => {
                   </div>
                   <div>
                     <h4 className="text-sm font-semibold text-muted-foreground mb-1">Company</h4>
-                    <p className="text-foreground">{selectedProject.company}</p>
+                      <p className="text-foreground">{selectedProject.company}</p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-semibold text-muted-foreground mb-1">Contract Type</h4>
+                    <p className="text-foreground">{selectedProject.contractType}</p>
                   </div>
 
                   {selectedProject.client && (

@@ -18,7 +18,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-type RegionId = 'usa' | 'europe' | 'south-america' | 'global';
+type RegionId = 'usa' | 'canada' | 'europe' | 'south-america' | 'global';
 
 type LonLat = {
   lon: number;
@@ -37,9 +37,36 @@ interface RegionDefinition {
 interface ProjectLocationDefinition {
   keywords: string[];
   coords: LonLat;
-  regionId: RegionId;
+  regionId: Exclude<RegionId, 'global'>;
   label: string;
 }
+
+const REGION_FALLBACK_LOCATIONS: Record<Exclude<RegionId, 'global'>, ProjectLocationDefinition> = {
+  usa: {
+    keywords: ['usa'],
+    coords: { lon: -98.5795, lat: 39.8283 },
+    regionId: 'usa',
+    label: 'United States',
+  },
+  canada: {
+    keywords: ['canada'],
+    coords: { lon: -79.3832, lat: 43.6532 },
+    regionId: 'canada',
+    label: 'Toronto, Ontario',
+  },
+  europe: {
+    keywords: ['europe'],
+    coords: { lon: -3.70379, lat: 40.416775 },
+    regionId: 'europe',
+    label: 'Spain',
+  },
+  'south-america': {
+    keywords: ['south-america'],
+    coords: { lon: -75.563, lat: 6.244 },
+    regionId: 'south-america',
+    label: 'Colombia',
+  },
+};
 
 const REGION_DEFINITIONS: Record<RegionId, RegionDefinition> = {
   global: {
@@ -59,6 +86,16 @@ const REGION_DEFINITIONS: Record<RegionId, RegionDefinition> = {
       'Pins surface large-scale delivery and capture programs across Washington, DC, Georgia, Louisiana, Texas, and Indiana. Hover to preview, then click to review the full project brief.',
     center: [39.8283, -98.5795],
     zoom: 4,
+  },
+  canada: {
+    id: 'canada',
+    name: 'Canada',
+    summary:
+      'Toronto-region transit programs delivered through alliance and progressive design-build models.',
+    detail:
+      'Explore Metrolinx programs across the Toronto network, including East Harbour, Scarborough, and Ontario Line corridor interfaces.',
+    center: [43.6532, -79.3832],
+    zoom: 10,
   },
   europe: {
     id: 'europe',
@@ -118,6 +155,24 @@ const PROJECT_LOCATIONS: ProjectLocationDefinition[] = [
     coords: { lon: -86.526, lat: 39.165 },
     regionId: 'usa',
     label: 'Bloomington, IN',
+  },
+  {
+    keywords: ['east harbour'],
+    coords: { lon: -79.338, lat: 43.653 },
+    regionId: 'canada',
+    label: 'East Harbour, Toronto',
+  },
+  {
+    keywords: ['scarborough subway', 'scarborough subway extension', 'srs pdb'],
+    coords: { lon: -79.257, lat: 43.744 },
+    regionId: 'canada',
+    label: 'Scarborough, Toronto',
+  },
+  {
+    keywords: ['ontario line elevated', 'ontario line elevated guideway', 'ontario line'],
+    coords: { lon: -79.324, lat: 43.689 },
+    regionId: 'canada',
+    label: 'Ontario Line Corridor, Toronto',
   },
   {
     keywords: ['ayacucho', 'medell'],
@@ -193,13 +248,30 @@ const PROJECT_LOCATIONS: ProjectLocationDefinition[] = [
   },
 ];
 
-const REGION_IDS: RegionId[] = ['global', 'usa', 'europe', 'south-america'];
+const REGION_IDS: RegionId[] = ['global', 'usa', 'canada', 'europe', 'south-america'];
 
 const matchProjectToLocation = (project: Project): ProjectLocationDefinition | undefined => {
   const haystack = `${project.name} ${project.location ?? ''}`.toLowerCase();
-  return PROJECT_LOCATIONS.find((entry) =>
+  const explicitMatch = PROJECT_LOCATIONS.find((entry) =>
     entry.keywords.some((keyword) => haystack.includes(keyword)),
   );
+
+  if (explicitMatch) return explicitMatch;
+
+  if (haystack.includes('toronto') || haystack.includes('ontario, canada') || haystack.includes('metrolinx')) {
+    return {
+      keywords: ['toronto'],
+      coords: { lon: -79.3832, lat: 43.6532 },
+      regionId: 'canada',
+      label: 'Toronto, Ontario',
+    };
+  }
+
+  if (project.region && project.region !== 'other') {
+    return REGION_FALLBACK_LOCATIONS[project.region];
+  }
+
+  return undefined;
 };
 
 const MapUpdater: React.FC<{ center: LatLngExpression; zoom: number }> = ({ center, zoom }) => {
@@ -227,9 +299,14 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
           ...project,
           coords: [match.coords.lat, match.coords.lon] as LatLngExpression,
           regionId: match.regionId,
+          mapLabel: match.label,
         };
       })
-      .filter((project): project is Project & { coords: LatLngExpression; regionId: RegionId } => project !== null);
+      .filter((project): project is Project & {
+        coords: LatLngExpression;
+        regionId: Exclude<RegionId, 'global'>;
+        mapLabel: string;
+      } => project !== null);
   }, [projects]);
 
   const activeRegionDef = REGION_DEFINITIONS[activeRegion];
@@ -243,7 +320,7 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
       <div className="text-center mb-12 space-y-3">
         <h3 className="text-3xl font-semibold text-foreground">Interactive Project Atlas</h3>
         <p className="text-muted-foreground max-w-3xl mx-auto">
-          Explore projects on an interactive map. Select a region to zoom in and see the projects located there.
+          Explore projects on an interactive map. Select a region to zoom in across North America, Europe, and South America.
         </p>
       </div>
 
@@ -275,6 +352,7 @@ const ProjectMaps: React.FC<{ projects: Project[] }> = ({ projects }) => {
             <Marker key={`${project.name}-${project.regionId}`} position={project.coords}>
               <Popup>
                 <b>{project.name}</b><br />
+                {project.mapLabel}<br />
                 {project.location}
               </Popup>
             </Marker>
