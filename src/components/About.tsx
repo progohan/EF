@@ -48,24 +48,25 @@ const About: React.FC<AboutProps> = ({ data, achievements }) => {
                 ))}
               </div>
 
-              {/* Key Achievements Section */}
-              <div>
-                <h3 className="text-2xl font-semibold text-foreground mb-8">
-                  Key Achievements
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {achievements.slice(0, 8).map((achievement, index) => (
-                    <div key={index} className="flex items-start p-4 bg-background rounded-lg border border-border shadow-sm hover:shadow-lg transition-shadow">
-                      <div className="flex-shrink-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center mr-4 mt-1">
-                        <svg className="w-3 h-3 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <p className="text-foreground/90 leading-relaxed">{achievement}</p>
-                    </div>
-                  ))}
+            </div>
+          </div>
+
+          {/* Key Achievements Section */}
+          <div className="mt-14">
+            <h3 className="text-2xl font-semibold text-foreground mb-8 text-center">
+              Key Achievements
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {achievements.slice(0, 9).map((achievement, index) => (
+                <div key={index} className="flex items-start p-4 bg-background rounded-lg border border-border shadow-sm hover:shadow-lg transition-shadow">
+                  <div className="flex-shrink-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center mr-4 mt-1">
+                    <svg className="w-3 h-3 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <p className="text-foreground/90 leading-relaxed">{achievement}</p>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
