@@ -38,9 +38,23 @@
   "work_experience": [
     {
       "position": "Project Director",
+      "company": "Aecon",
+      "location": "Washington DC, USA",
+      "duration": "09.2026 - Present",
+      "responsibilities": [
+        "Lead business development and pursuit planning for major U.S. civil infrastructure projects.",
+        "Identify and assess opportunities in dams, hydropower, tunnels, transit, and airports.",
+        "Build relationships with public and federal clients, engineering firms, and construction partners.",
+        "Develop strategic partnerships and joint venture opportunities.",
+        "Evaluate delivery methods, commercial risks, and project fit.",
+        "Coordinate U.S. and Canadian teams on market engagement and proposal development."
+      ]
+    },
+    {
+      "position": "Project Director",
       "company": "Flatiron Dragados Corp.",
       "location": "Washington DC, USA",
-      "duration": "06.2024 - Present",
+      "duration": "06.2024 - 06.2026",
       "responsibilities": [
         "Leading multidisciplinary project delivery efforts for nationally significant rail infrastructure programs under progressive delivery models.",
         "Responsible for aligning construction execution with design coordination, commercial strategy, and stakeholder interface across joint venture and owner organizations.",
